@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="240" height="64">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&amp;family=Roboto:wght@500&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- ── House outline ── -->
+  <!-- Roof / gable -->
+  <polyline points="8,30 32,10 56,30"
+            stroke="#1F4E79" stroke-width="3.8" fill="none"
+            stroke-linejoin="miter" stroke-linecap="square"/>
+  <!-- Left wall -->
+  <line x1="11.2" y1="28.5" x2="11.2" y2="54"
+        stroke="#1F4E79" stroke-width="3.8" stroke-linecap="square"/>
+  <!-- Right wall -->
+  <line x1="52.8" y1="28.5" x2="52.8" y2="54"
+        stroke="#1F4E79" stroke-width="3.8" stroke-linecap="square"/>
+  <!-- Base -->
+  <line x1="11.2" y1="54" x2="52.8" y2="54"
+        stroke="#1F4E79" stroke-width="3.8" stroke-linecap="square"/>
+
+  <!-- ── Green leaf centred in house ── -->
+  <!-- Leaf body: teardrop pointing up -->
+  <path d="M32,17 C32,17 21,26 23,37 C25,45 32,45 32,45
+           C32,45 39,45 41,37 C43,26 32,17 32,17 Z"
+        fill="#5BA94B"/>
+  <!-- Centre vein -->
+  <line x1="32" y1="19" x2="32" y2="44.5"
+        stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- ── "PDX" – Montserrat Black, tightly tracked ── -->
+  <text x="68" y="38"
+        font-family="'Montserrat', 'Arial Black', Arial, sans-serif"
+        font-weight="900"
+        font-size="30"
+        fill="#1F4E79"
+        letter-spacing="2">PDX</text>
+
+  <!-- ── "HOME ENERGY SCORE, LLC" – Roboto Medium, spaced caps ── -->
+  <text x="69" y="53"
+        font-family="'Roboto', 'Arial', sans-serif"
+        font-weight="500"
+        font-size="9.2"
+        fill="#5BA94B"
+        letter-spacing="1.8">HOME ENERGY SCORE, LLC</text>
+</svg>
