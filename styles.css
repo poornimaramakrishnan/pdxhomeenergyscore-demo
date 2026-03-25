@@ -231,7 +231,7 @@ h1, h2, h3, h4 {
 /* ---------- HERO ---------- */
 .hero {
     padding: 160px 0 100px;
-    background: linear-gradient(180deg, #F0F5FA 0%, #FFFFFF 100%);
+    background: #FFFFFF;
     text-align: center;
 }
 
@@ -417,7 +417,7 @@ h1, h2, h3, h4 {
 
 /* Add-ons */
 .addons-section {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -619,11 +619,11 @@ h1, h2, h3, h4 {
 .stripe-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 0.8rem;
     font-weight: 600;
-    color: #5BA94B;
-    background: #EAF5E7;
+    color: #635BFF;
+    background: #F0EFFF;
     padding: 6px 14px;
     border-radius: 20px;
 }
