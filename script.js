@@ -89,6 +89,22 @@ function showStep(step) {
         if (i < step) el.classList.add('completed');
         if (i === step) el.classList.add('active');
     }
+    // Smooth scroll to the newly active step (with header offset)
+    setTimeout(function () {
+        var activeStep = document.getElementById('bookingStep' + step);
+        if (activeStep) {
+            var top = activeStep.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+    }, 50);
+}
+
+// Allow clicking a completed step header to go back to it
+function stepHeaderClick(step) {
+    var el = document.getElementById('bookingStep' + step);
+    if (el && el.classList.contains('completed')) {
+        showStep(step);
+    }
 }
 
 function selectSize(btn) {
@@ -96,6 +112,12 @@ function selectSize(btn) {
     btn.classList.add('selected');
     bookingState.size = btn.getAttribute('data-size');
     bookingState.basePrice = parseInt(btn.getAttribute('data-base-price'), 10);
+
+    // Update step 1 summary
+    var label = bookingState.size === 'small' ? 'Up to 2,250 sq ft' : '2,251–2,500 sq ft';
+    var s1 = document.getElementById('stepSummary1');
+    if (s1) s1.textContent = label;
+
     setTimeout(function () { showStep(2); }, 300);
 }
 
@@ -177,8 +199,7 @@ function renderTimeSlots(dateStr, dayOfWeek) {
     var slotsContainer = document.getElementById('timeSlots');
     if (!slotsContainer) return;
 
-    var base = bookingState.basePrice;
-    var slots = [];
+    var base = bookingState.basePrice;    var slots = [];
 
     if (dayOfWeek === 6) {
         // Saturday
@@ -210,6 +231,18 @@ function renderTimeSlots(dateStr, dayOfWeek) {
     }
     html += '</div>';
     slotsContainer.innerHTML = html;
+
+    // On mobile (single column layout), scroll time slots into view
+    if (window.innerWidth <= 968) {
+        setTimeout(function () {
+            slotsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+
+    // Brief highlight to draw attention to the time slot panel
+    slotsContainer.style.transition = 'box-shadow 0.3s ease';
+    slotsContainer.style.boxShadow = '0 0 0 2px #1F4E79';
+    setTimeout(function () { slotsContainer.style.boxShadow = ''; }, 800);
 }
 
 function selectSlot(el, price, time) {
@@ -217,6 +250,14 @@ function selectSlot(el, price, time) {
     el.classList.add('selected');
     bookingState.selectedSlot = time;
     bookingState.finalPrice = price;
+
+    // Update step 2 summary
+    var dateParts = bookingState.selectedDate.split('-');
+    var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var dateShort = monthNames[parseInt(dateParts[1]) - 1] + ' ' + parseInt(dateParts[2]);
+    var s2 = document.getElementById('stepSummary2');
+    if (s2) s2.textContent = dateShort + ' at ' + time;
+
     setTimeout(function () {
         showStep(3);
         updateOrderSummary();

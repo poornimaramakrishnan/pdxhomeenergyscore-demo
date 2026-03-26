@@ -132,9 +132,41 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .booking-flow { max-width: 900px; margin: 0 auto 32px; background: #FFFFFF; border-radius: 16px; border: 1px solid #e8ecf0; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
 .booking-step { padding: 32px 36px; border-bottom: 1px solid #e8ecf0; display: none; }
 .booking-step:last-child { border-bottom: none; }
-.booking-step.active { display: block; }
-.booking-step.completed { display: block; opacity: 0.55; pointer-events: none; }
-.booking-step.completed .booking-step-header::after { content: 'check'; color: #5BA94B; font-size: 1.2rem; font-weight: 700; margin-left: 12px; }
+.booking-step.active { display: block; animation: stepFadeIn 0.3s ease; }
+@keyframes stepFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Completed steps: collapse to header only */
+.booking-step.completed { display: block; }
+.booking-step.completed .booking-step-body { display: none; }
+.booking-step.completed .booking-step-header {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+}
+.booking-step.completed .booking-step-header:hover { opacity: 1; }
+.booking-step.completed .booking-step-num { background: #5BA94B; }
+.booking-step.completed .booking-step-header::after {
+    content: '✓';
+    color: #5BA94B;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-left: auto;
+}
+.booking-step-summary {
+    display: none;
+    font-size: 0.88rem;
+    color: #5BA94B;
+    font-weight: 600;
+    margin-left: auto;
+    margin-right: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}
+.booking-step.completed .booking-step-summary { display: block; }
 .booking-step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
 .booking-step-num { width: 32px; height: 32px; border-radius: 50%; background: #1F4E79; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .booking-step-header h3 { font-size: 1.15rem; margin: 0; color: #1F4E79; }
@@ -164,7 +196,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .cal-day-today { border: 2px solid #1F4E79; }
 .time-slots { background: #FFFFFF; border: 1px solid #e8ecf0; border-radius: 12px; padding: 20px; max-height: 340px; overflow-y: auto; }
 .slots-prompt { color: #888; font-size: 0.9rem; text-align: center; padding: 40px 0; }
-.time-slot-list { display: flex; flex-direction: column; gap: 8px; }
+.time-slot-list { display: flex; flex-direction: column; gap: 8px; animation: stepFadeIn 0.25s ease; }
 .time-slot { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid #e8ecf0; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; background: #FFFFFF; font-family: inherit; width: 100%; }
 .time-slot:hover { border-color: #1F4E79; background: #f0f4f8; }
 .time-slot.selected { border-color: #1F4E79; background: #edf2f7; }

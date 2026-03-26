@@ -184,50 +184,56 @@
 
                 <!-- Step 1: Property Size Selection -->
                 <div class="booking-step active" id="bookingStep1">
-                    <div class="booking-step-header">
+                    <div class="booking-step-header" onclick="stepHeaderClick(1)">
                         <span class="booking-step-num">1</span>
                         <h3>Select Property Size</h3>
+                        <span class="booking-step-summary" id="stepSummary1"></span>
                     </div>
-                    <div class="size-options">
-                        <button class="size-option" data-size="small" data-base-price="159" onclick="selectSize(this)">
-                            <span class="size-label">Up to 2,250 sq ft</span>
-                            <span class="size-price">From $159</span>
-                        </button>
-                        <button class="size-option" data-size="large" data-base-price="189" onclick="selectSize(this)">
-                            <span class="size-label">2,251 – 2,500 sq ft</span>
-                            <span class="size-price">From $189</span>
-                        </button>
+                    <div class="booking-step-body">
+                        <div class="size-options">
+                            <button class="size-option" data-size="small" data-base-price="159" onclick="selectSize(this)">
+                                <span class="size-label">Up to 2,250 sq ft</span>
+                                <span class="size-price">From $159</span>
+                            </button>
+                            <button class="size-option" data-size="large" data-base-price="189" onclick="selectSize(this)">
+                                <span class="size-label">2,251 – 2,500 sq ft</span>
+                                <span class="size-price">From $189</span>
+                            </button>
+                        </div>
+                        <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
                     </div>
-                    <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
                 </div>
 
                 <!-- Step 2: Calendar Selection -->
                 <div class="booking-step" id="bookingStep2">
-                    <div class="booking-step-header">
+                    <div class="booking-step-header" onclick="stepHeaderClick(2)">
                         <span class="booking-step-num">2</span>
                         <h3>Choose Date &amp; Time</h3>
+                        <span class="booking-step-summary" id="stepSummary2"></span>
                     </div>
-                    <div class="calendar-wrapper" id="calendarWrapper">
-                        <!-- Interactive Calendar Demo -->
-                        <div class="demo-calendar" id="demoCalendar">
-                            <div class="cal-header">
-                                <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
-                                <span class="cal-month" id="calMonth"></span>
-                                <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
+                    <div class="booking-step-body">
+                        <div class="calendar-wrapper" id="calendarWrapper">
+                            <!-- Interactive Calendar Demo -->
+                            <div class="demo-calendar" id="demoCalendar">
+                                <div class="cal-header">
+                                    <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
+                                    <span class="cal-month" id="calMonth"></span>
+                                    <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
+                                </div>
+                                <div class="cal-weekdays">
+                                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                                </div>
+                                <div class="cal-days" id="calDays"></div>
                             </div>
-                            <div class="cal-weekdays">
-                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            <div class="time-slots" id="timeSlots">
+                                <p class="slots-prompt">Select a date to view available times</p>
                             </div>
-                            <div class="cal-days" id="calDays"></div>
                         </div>
-                        <div class="time-slots" id="timeSlots">
-                            <p class="slots-prompt">Select a date to view available times</p>
-                        </div>
+                        <p class="booking-note" id="pricingNote" style="display:none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            <span id="pricingNoteText"></span>
+                        </p>
                     </div>
-                    <p class="booking-note" id="pricingNote" style="display:none;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span id="pricingNoteText"></span>
-                    </p>
                 </div>
 
                 <!-- Step 3: Review & Pay -->
@@ -235,29 +241,32 @@
                     <div class="booking-step-header">
                         <span class="booking-step-num">3</span>
                         <h3>Review &amp; Pay</h3>
+                        <span class="booking-step-summary" id="stepSummary3"></span>
                     </div>
-                    <div class="order-summary" id="orderSummary">
-                        <div class="summary-row">
-                            <span>Property Size</span>
-                            <span id="summarySize">—</span>
+                    <div class="booking-step-body">
+                        <div class="order-summary" id="orderSummary">
+                            <div class="summary-row">
+                                <span>Property Size</span>
+                                <span id="summarySize">—</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Appointment</span>
+                                <span id="summaryTime">—</span>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <span>Total Price</span>
+                                <span id="summaryPrice">—</span>
+                            </div>
+                            <p class="summary-trust">No surprises. Price shown is the price you pay.</p>
                         </div>
-                        <div class="summary-row">
-                            <span>Appointment</span>
-                            <span id="summaryTime">—</span>
+                        <div class="payment-options-inline">
+                            <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="openStripeDemo()">
+                                <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
+                                Pay Now with Card
+                            </button>
+                            <span class="payment-or">or</span>
+                            <p class="payment-alt">Leave a check or cash at the property during the appointment.</p>
                         </div>
-                        <div class="summary-row summary-total">
-                            <span>Total Price</span>
-                            <span id="summaryPrice">—</span>
-                        </div>
-                        <p class="summary-trust">No surprises. Price shown is the price you pay.</p>
-                    </div>
-                    <div class="payment-options-inline">
-                        <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="openStripeDemo()">
-                            <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
-                            Pay Now with Card
-                        </button>
-                        <span class="payment-or">or</span>
-                        <p class="payment-alt">Leave a check or cash at the property during the appointment.</p>
                     </div>
                 </div>
             </div>
