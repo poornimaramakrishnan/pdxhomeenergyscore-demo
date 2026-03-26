@@ -80,10 +80,8 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
 .logo:hover { opacity: 0.88; }
-.logo-mark { display: flex; align-items: center; flex-shrink: 0; }
-.logo-wordmark { display: flex; flex-direction: column; line-height: 1; gap: 4px; }
-.logo-company { font-family: 'Inter', Arial, sans-serif; font-weight: 700; font-size: 1.15rem; color: #1F4E79; letter-spacing: 0.04em; line-height: 1; }
-.logo-ccb { font-family: 'Inter', Arial, sans-serif; font-weight: 400; font-size: 0.65rem; color: #999; letter-spacing: 0.02em; line-height: 1; }
+.logo-img { height: 48px; width: auto; display: block; object-fit: contain; }
+.logo-ccb-badge { font-family: 'Inter', Arial, sans-serif; font-weight: 400; font-size: 0.6rem; color: #999; letter-spacing: 0.02em; line-height: 1; white-space: nowrap; }
 .main-nav { display: flex; align-items: center; gap: 8px; }
 .nav-link { padding: 8px 16px; font-size: 0.95rem; font-weight: 500; color: #2D2D2D; border-radius: 6px; transition: all 0.2s ease; }
 .nav-link:hover { color: #1F4E79; background: rgba(31,78,121,0.05); }
@@ -275,7 +273,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .site-footer { padding: 40px 0; background: #FFFFFF; border-top: 1px solid #e8ecf0; }
 .footer-content { text-align: center; }
 .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
-.footer-company { font-size: 1rem; }
+.footer-logo-img { height: 40px; width: auto; display: block; object-fit: contain; margin: 0 auto; }
 .footer-info { margin-bottom: 16px; }
 .footer-info p { font-size: 0.85rem; color: #888; margin-bottom: 4px; }
 .footer-info a { color: #1F4E79; font-weight: 600; }
@@ -321,8 +319,9 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .hero h1 { font-size: 1.8rem; }
     .hero-subtitle { font-size: 1.05rem; }
     .price { font-size: 2.5rem; }
-    .logo-company { font-size: 0.95rem; }
-    .logo-ccb { font-size: 0.55rem; }
+    .logo-img { height: 36px; }
+    .logo-ccb-badge { display: none; }
+    .footer-logo-img { height: 32px; }
 }
 
 /* ---------- ANIMATIONS ---------- */
