@@ -50,6 +50,56 @@
         "serviceType": "Home Energy Score Assessment"
     }
     </script>
+
+    <!-- FAQ Schema for Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How long does a home energy score assessment take?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Under 1 hour on-site. Quick, thorough, and non-invasive."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What do I need to prepare for a home energy score?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Please ensure clear access to the attic and crawlspaces. That's it — we handle the rest."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "When will I receive my home energy score report?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Less than 24 hours — 99% of the time."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is a home energy score required for selling my home in Portland?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The City of Portland requires a Home Energy Score for most homes listed for sale. You can check if a score is required at your address on the City of Portland website."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What areas does PDX Home Energy Score cover?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We serve the Portland metro area, including Hillsboro, Beaverton, Lake Oswego, Tigard, and Milwaukie."
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 <body>
 
@@ -65,6 +115,7 @@
             <nav class="main-nav" id="mainNav">
                 <a href="#pricing" class="nav-link">Pricing</a>
                 <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#contact" class="nav-link">Contact</a>
                 <a href="tel:5032906958" class="nav-link nav-phone">(503) 290-6958</a>
                 <a href="#schedule" class="btn btn-primary btn-nav">Schedule Now</a>
             </nav>
@@ -167,6 +218,36 @@
             <div class="pricing-notes">
                 <p>Homes over 2,500 sq ft are not currently serviced.</p>
                 <p>Don't see a time that works? <a href="tel:5032906958">Call</a> or email and we'll try to accommodate.</p>
+            </div>
+
+            <div class="addons-section">
+                <h3>Scheduling Add-Ons</h3>
+                <div class="addons-grid">
+                    <div class="addon-item">
+                        <span class="addon-label">Same/Next Day Appointment</span>
+                        <span class="addon-price">+$20–$40</span>
+                    </div>
+                    <div class="addon-item">
+                        <span class="addon-label">Evening Appointment</span>
+                        <span class="addon-price">+$20</span>
+                    </div>
+                    <div class="addon-item">
+                        <span class="addon-label">Saturday Appointment</span>
+                        <span class="addon-price">+$20</span>
+                    </div>
+                    <div class="addon-item">
+                        <span class="addon-label">Sunday Appointment</span>
+                        <span class="addon-price">+$40</span>
+                    </div>
+                    <div class="addon-item">
+                        <span class="addon-label">Holiday (Memorial Day, Labor Day, July 4th)</span>
+                        <span class="addon-price">+$20–$100</span>
+                    </div>
+                    <div class="addon-item">
+                        <span class="addon-label">Major Holiday (Thanksgiving, Christmas, New Year's)</span>
+                        <span class="addon-price">+$100</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -272,8 +353,13 @@
             </div>
 
             <!-- Acuity Embed Zone (for final production) -->
-            <div class="acuity-production-note">
-                <p><em>Production site: The booking flow above will be replaced by the live Acuity Scheduling calendar with Stripe payments. This interactive demo shows the intended user experience.</em></p>
+            <div class="acuity-embed-section" id="acuityEmbed">
+                <h3 class="acuity-embed-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Live Scheduling — Book &amp; Pay Now via Acuity
+                </h3>
+                <p class="acuity-embed-desc">Select your home size below to see real availability and book instantly.</p>
+                <iframe src="https://app.acuityscheduling.com/schedule.php?owner=37810233" title="Schedule Appointment" width="100%" height="800" frameBorder="0" style="border:none; border-radius:12px;"></iframe>
             </div>
         </div>
     </section>
@@ -475,12 +561,67 @@
                         <p>Less than 24 hours — 99% of the time. We know your timeline matters.</p>
                     </div>
                 </details>
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-question">Is this required for selling my home?</span>
+                        <span class="faq-toggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>It depends on your location. The City of Portland requires a Home Energy Score for most homes listed for sale. <a href="https://www.portland.gov/bps/home-energy-score/check-address" target="_blank" rel="noopener">Check this site to see if a score is required at your address</a>.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary>
+                        <span class="faq-question">What areas do you cover?</span>
+                        <span class="faq-toggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>We serve the Portland metro area, including Hillsboro, Beaverton, Lake Oswego, Tigard, and Milwaukie. Not sure if you're in our service area? Give us a call at <a href="tel:5032906958">(503) 290-6958</a>.</p>
+                    </div>
+                </details>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- SECTION 8: FINAL CTA -->
+    <!-- SECTION 8: CONTACT FORM -->
+    <!-- ============================================ -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <p class="section-subtitle">Have a question? Send us a message and we'll get back to you quickly.</p>
+            <form class="contact-form" id="contactForm" action="https://formspree.io/f/xdkozpqr" method="POST" onsubmit="return handleContactSubmit(event)">
+                <div class="form-group">
+                    <label for="contactName">Name</label>
+                    <input type="text" id="contactName" name="name" placeholder="Your name" required autocomplete="name" />
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" name="message" rows="4" placeholder="How can we help?" required></textarea>
+                </div>
+                <input type="hidden" name="_replyto" value="">
+                <input type="hidden" name="_subject" value="New message from PDX Home Energy Score website">
+                <button type="submit" class="btn btn-primary btn-lg btn-contact-submit" id="contactSubmitBtn">Send Message</button>
+                <p class="contact-note">We typically respond within a few hours during business days.</p>
+            </form>
+            <div class="contact-success" id="contactSuccess" style="display:none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+                <h3>Message Sent!</h3>
+                <p>Thank you — we'll get back to you shortly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 9: FINAL CTA -->
     <!-- ============================================ -->
     <section class="final-cta" id="cta">
         <div class="container">

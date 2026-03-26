@@ -215,8 +215,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .payment-options-inline .btn { margin-bottom: 12px; }
 .payment-or { display: block; font-size: 0.85rem; color: #aaa; margin: 8px 0; }
 .payment-alt { font-size: 0.85rem; color: #888; }
-.acuity-production-note { text-align: center; padding: 20px; background: #FFF8E1; border-radius: 10px; border: 1px solid #FFE082; max-width: 700px; margin: 0 auto; }
-.acuity-production-note p { font-size: 0.82rem; color: #B8860B; margin: 0; }
+.acuity-production-note { display: none; }
 
 /* ---------- HOW IT WORKS ---------- */
 .how-it-works { padding: 80px 0; background: #FFFFFF; }
@@ -301,6 +300,36 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .cta-phone { margin-top: 20px; font-size: 0.95rem; color: rgba(255,255,255,0.6); }
 .cta-phone a { color: #FFFFFF; font-weight: 600; }
 
+/* ---------- ACUITY EMBED ---------- */
+.acuity-embed-section { max-width: 900px; margin: 40px auto 0; background: #FFFFFF; border-radius: 16px; border: 2px solid #5BA94B; padding: 28px; box-shadow: 0 4px 20px rgba(91,169,75,0.08); }
+.acuity-embed-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; color: #1F4E79; margin-bottom: 8px; }
+.acuity-embed-desc { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+
+/* ---------- ADD-ONS PRICING ---------- */
+.addons-section { max-width: 700px; margin: 40px auto 0; text-align: center; }
+.addons-section h3 { font-size: 1.3rem; color: #1F4E79; margin-bottom: 20px; }
+.addons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.addon-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: #FFFFFF; border: 1px solid #e8ecf0; border-radius: 10px; transition: all 0.2s ease; }
+.addon-item:hover { border-color: #1F4E79; box-shadow: 0 2px 8px rgba(31,78,121,0.06); }
+.addon-label { font-size: 0.88rem; font-weight: 500; color: #2D2D2D; text-align: left; }
+.addon-price { font-size: 0.9rem; font-weight: 700; color: #1F4E79; white-space: nowrap; margin-left: 12px; }
+
+/* ---------- CONTACT FORM ---------- */
+.contact-section { padding: 80px 0; background: #FFFFFF; }
+.contact-section h2 { text-align: center; font-size: 2.2rem; margin-bottom: 12px; }
+.contact-form { max-width: 520px; margin: 0 auto; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 0.88rem; font-weight: 600; color: #2D2D2D; margin-bottom: 6px; }
+.form-group input, .form-group textarea { width: 100%; padding: 14px 16px; border: 1.5px solid #d1d9e0; border-radius: 10px; font-family: inherit; font-size: 1rem; color: #2D2D2D; background: #FFFFFF; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1F4E79; box-shadow: 0 0 0 3px rgba(31,78,121,0.1); }
+.form-group input::placeholder, .form-group textarea::placeholder { color: #aab7c4; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.btn-contact-submit { width: 100%; margin-top: 8px; }
+.contact-note { text-align: center; font-size: 0.82rem; color: #888; margin-top: 16px; }
+.contact-success { text-align: center; max-width: 520px; margin: 0 auto; padding: 40px 20px; }
+.contact-success h3 { color: #5BA94B; font-size: 1.4rem; margin: 16px 0 8px; }
+.contact-success p { color: #666; font-size: 1rem; }
+
 /* ---------- FOOTER ---------- */
 .site-footer { padding: 40px 0; background: #FFFFFF; border-top: 1px solid #e8ecf0; }
 .footer-content { text-align: center; }
@@ -325,6 +354,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .payment-grid { grid-template-columns: 1fr; max-width: 400px; }
     .calendar-wrapper { grid-template-columns: 1fr; }
     .size-options { grid-template-columns: 1fr; }
+    .addons-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -332,7 +362,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .hero h1 { font-size: 2.2rem; }
     .hero-subtitle { font-size: 1.2rem; }
     .hero-desc { font-size: 1rem; }
-    .pricing-section h2, .how-it-works h2, .schedule-section h2, .payment-section h2, .faq-section h2, .final-cta h2 { font-size: 1.8rem; }
+    .pricing-section h2, .how-it-works h2, .schedule-section h2, .payment-section h2, .faq-section h2, .final-cta h2, .contact-section h2 { font-size: 1.8rem; }
     .badges-grid { grid-template-columns: 1fr; gap: 20px; }
     .main-nav { display: none; position: fixed; top: 72px; left: 0; right: 0; background: #FFFFFF; flex-direction: column; padding: 20px 24px; border-bottom: 1px solid #e8ecf0; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
     .main-nav.active { display: flex; }
@@ -341,7 +371,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .mobile-call-btn { display: flex; }
     .hero-cta { flex-direction: column; align-items: center; }
     .btn-lg { width: 100%; max-width: 320px; }
-    .pricing-section, .how-it-works, .schedule-section, .payment-section, .faq-section, .final-cta { padding: 60px 0; }
+    .pricing-section, .how-it-works, .schedule-section, .payment-section, .faq-section, .final-cta, .contact-section { padding: 60px 0; }
     .booking-step { padding: 24px 20px; }
     .stripe-modal { padding: 24px 20px; }
     .stripe-card-row { grid-template-columns: 1fr; }
