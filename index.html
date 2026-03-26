@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Oregon Home Energy Scores – Fast, compliant, and hassle-free. Licensed assessor serving Portland metro & Salem areas. Schedule online, flat-rate pricing, reports in under 24 hours.">
-    <meta name="keywords" content="home energy score, Oregon home energy score, Portland home energy score, energy assessment, home sale requirement, Portland real estate, energy efficiency rating">
+    <meta name="description" content="Home Energy Scores – Fast, compliant, done right. Licensed assessor serving the Portland metro area. Schedule online, flat-rate pricing, reports delivered quickly.">
+    <meta name="keywords" content="home energy score, Oregon home energy score, Portland home energy score, energy assessment, home sale requirement, Portland real estate, energy efficiency rating, PDX energy score">
     <meta name="author" content="PDX Home Energy Score, LLC">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Oregon Home Energy Scores – Fast, Compliant, Done Right">
-    <meta property="og:description" content="Licensed & compliant Oregon home energy assessments. Flat-rate pricing. Reports in under 24 hours. Schedule & pay online.">
+    <meta property="og:title" content="Home Energy Scores – Fast, Compliant, Done Right | PDX Home Energy Score">
+    <meta property="og:description" content="Licensed home energy assessments for Portland metro. Flat-rate pricing. Reports delivered quickly. Schedule &amp; pay online.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.pdxhomeenergyscore.com">
     <meta property="og:image" content="og-image.png">
@@ -19,7 +19,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 
-    <title>Oregon Home Energy Scores – Fast, Compliant, Done Right | PDX Home Energy Score</title>
+    <title>Home Energy Scores – Fast, Compliant, Done Right | PDX Home Energy Score</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,13 +28,16 @@
 
     <link rel="stylesheet" href="styles.css">
 
+    <!-- Stripe.js for demo payment -->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": "PDX Home Energy Score, LLC",
-        "description": "Licensed Oregon Home Energy Score Assessor serving Portland metro and Salem areas.",
+        "description": "Licensed Oregon Home Energy Score Assessor serving the Portland metro area.",
         "telephone": "(503) 290-6958",
         "url": "https://www.pdxhomeenergyscore.com",
         "address": {
@@ -42,7 +45,7 @@
             "addressRegion": "OR",
             "addressCountry": "US"
         },
-        "areaServed": ["Portland", "Salem", "Hillsboro", "Milwaukie"],
+        "areaServed": ["Portland", "Hillsboro", "Milwaukie", "Beaverton", "Lake Oswego", "Tigard"],
         "priceRange": "$159-$189",
         "serviceType": "Home Energy Score Assessment"
     }
@@ -56,29 +59,26 @@
     <header class="site-header" id="header">
         <div class="container header-inner">
             <a href="#hero" class="logo" aria-label="PDX Home Energy Score - Home">
-                <!-- Inline logo so Montserrat font renders correctly -->
                 <span class="logo-mark" aria-hidden="true">
                     <svg width="52" height="52" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- House outline -->
                         <polyline points="8,34 32,12 56,34" stroke="#1F4E79" stroke-width="4.2" fill="none" stroke-linejoin="miter" stroke-linecap="square"/>
                         <line x1="11.6" y1="32.4" x2="11.6" y2="56" stroke="#1F4E79" stroke-width="4.2" stroke-linecap="square"/>
                         <line x1="52.4" y1="32.4" x2="52.4" y2="56" stroke="#1F4E79" stroke-width="4.2" stroke-linecap="square"/>
                         <line x1="11.6" y1="56" x2="52.4" y2="56" stroke="#1F4E79" stroke-width="4.2" stroke-linecap="square"/>
-                        <!-- Green leaf -->
                         <path d="M32,20 C32,20 21,30 23,41 C25,49 32,49 32,49 C32,49 39,49 41,41 C43,30 32,20 32,20 Z" fill="#5BA94B"/>
                         <line x1="32" y1="22" x2="32" y2="48" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </span>
                 <span class="logo-wordmark">
-                    <span class="logo-pdx">PDX</span>
-                    <span class="logo-sub">HOME ENERGY SCORE, LLC</span>
+                    <span class="logo-company">HOME ENERGY SCORE, LLC</span>
+                    <span class="logo-ccb">Oregon CCB License #259388</span>
                 </span>
             </a>
             <nav class="main-nav" id="mainNav">
                 <a href="#pricing" class="nav-link">Pricing</a>
-                <a href="#how-it-works" class="nav-link">How It Works</a>
                 <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#schedule" class="nav-link btn btn-nav">Schedule Now</a>
+                <a href="tel:5032906958" class="nav-link nav-phone">(503) 290-6958</a>
+                <a href="#schedule" class="btn btn-primary btn-nav">Schedule Now</a>
             </nav>
             <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
                 <span></span>
@@ -94,14 +94,13 @@
     <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Oregon Home Energy Scores</h1>
+                <h1>Home Energy Scores</h1>
                 <p class="hero-subtitle">Fast. Compliant. Done Right.</p>
-                <p class="hero-desc">Get your required home energy assessment completed quickly and hassle-free. Licensed assessor serving the Portland &amp; Salem metro areas.</p>
+                <p class="hero-desc">Licensed. On-Time. Reports delivered quickly – typically within 24 hours.</p>
                 <div class="hero-cta">
-                    <a href="#schedule" class="btn btn-primary btn-lg">Schedule &amp; Pay Now</a>
+                    <a href="#schedule" class="btn btn-primary btn-lg">Book Your Energy Score</a>
                     <a href="#pricing" class="btn btn-outline btn-lg">View Pricing</a>
                 </div>
-                <p class="hero-license">Oregon Contractor License #259388 &nbsp;|&nbsp; <a href="tel:5032906958">(503) 290-6958</a></p>
             </div>
         </div>
     </section>
@@ -111,32 +110,34 @@
     <!-- ============================================ -->
     <section class="trust-badges" id="trust">
         <div class="container">
+            <p class="trust-header">Why homeowners choose us</p>
             <div class="badges-grid">
                 <div class="badge-item">
                     <div class="badge-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <p>Licensed &amp; compliant with Oregon requirements</p>
+                    <p>Licensed &amp; compliant</p>
                 </div>
                 <div class="badge-item">
                     <div class="badge-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <p>Recommended by Homeowners &amp; Brokers</p>
+                    <p>Trusted by homeowners &amp; brokers</p>
                 </div>
                 <div class="badge-item">
                     <div class="badge-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <p>Reports delivered within 24 hours</p>
+                    <p>Fast turnaround (typically within 24 hours)</p>
                 </div>
             </div>
+            <p class="trust-serving">Serving the Portland Metro Area</p>
         </div>
     </section>
 
@@ -146,134 +147,142 @@
     <section class="pricing-section" id="pricing">
         <div class="container">
             <h2>Clear Pricing. Flat Rate. No Surprises.</h2>
+            <p class="pricing-subtitle">Weekday daytime appointments booked at least 48 hours in advance receive our lowest rates. Other times are priced higher.</p>
 
-            <div class="pricing-grid">
-                <!-- Main Pricing Cards -->
+            <div class="pricing-grid pricing-grid-2col">
                 <div class="price-card price-card-featured">
                     <div class="price-label">Most Common</div>
                     <h3>Up to 2,250 sq ft</h3>
-                    <div class="price">$159</div>
+                    <div class="price">$159<span class="price-plus">+</span></div>
                     <ul class="price-features">
                         <li>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            On-site energy assessment
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Registered in Green Building Registry
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Compliant with city requirements
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Report in under 24 hours
+                            On-site energy assessment &amp; official report
                         </li>
                     </ul>
-                    <a href="#schedule" class="btn btn-primary">Schedule Now</a>
+                    <a href="#schedule" class="btn btn-primary">Book Now</a>
                 </div>
 
                 <div class="price-card">
                     <h3>2,251 – 2,500 sq ft</h3>
-                    <div class="price">$189</div>
+                    <div class="price">$189<span class="price-plus">+</span></div>
                     <ul class="price-features">
                         <li>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            On-site energy assessment
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Registered in Green Building Registry
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Compliant with city requirements
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Report in under 24 hours
+                            On-site energy assessment &amp; official report
                         </li>
                     </ul>
-                    <a href="#schedule" class="btn btn-primary">Schedule Now</a>
-                </div>
-
-                <div class="price-card">
-                    <h3>Over 2,500 sq ft</h3>
-                    <div class="price price-call">Call for Pricing</div>
-                    <ul class="price-features">
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Custom quote based on size
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Same great service &amp; speed
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Compliant with city requirements
-                        </li>
-                    </ul>
-                    <a href="tel:5032906958" class="btn btn-outline">Call (503) 290-6958</a>
+                    <a href="#schedule" class="btn btn-primary">Book Now</a>
                 </div>
             </div>
 
-            <!-- Add-ons -->
-            <div class="addons-section">
-                <h3>Scheduling Add-Ons</h3>
-                <div class="addons-grid">
-                    <div class="addon-item">
-                        <span class="addon-name">Same / Next Day</span>
-                        <span class="addon-price">+ $20 – $40</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Evening Appointment</span>
-                        <span class="addon-price">+ $20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Saturday</span>
-                        <span class="addon-price">+ $20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Sunday</span>
-                        <span class="addon-price">+ $40</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Memorial Day</span>
-                        <span class="addon-price">+ $20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Labor Day</span>
-                        <span class="addon-price">+ $20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">July 4th</span>
-                        <span class="addon-price">+ $100</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Thanksgiving</span>
-                        <span class="addon-price">+ $100</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Christmas Eve</span>
-                        <span class="addon-price">+ $100</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">Christmas Day</span>
-                        <span class="addon-price">+ $100</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-name">New Year's Eve</span>
-                        <span class="addon-price">+ $100</span>
-                    </div>
-                </div>
+            <div class="pricing-notes">
+                <p>Homes over 2,500 sq ft are not currently serviced.</p>
+                <p>Don't see a time that works? <a href="tel:5032906958">Call</a> or email and we'll try to accommodate.</p>
             </div>
         </div>
     </section>
 
     <!-- ============================================ -->
-    <!-- SECTION 4: HOW IT WORKS -->
+    <!-- SECTION 4: SCHEDULING (Full-Width Booking Flow) -->
+    <!-- ============================================ -->
+    <section class="schedule-section" id="schedule">
+        <div class="container container-wide">
+            <h2>Schedule Your Appointment Now</h2>
+            <p class="section-subtitle">Pricing is based on appointment time and availability.</p>
+
+            <!-- Booking Flow Demo -->
+            <div class="booking-flow" id="bookingFlow">
+
+                <!-- Step 1: Property Size Selection -->
+                <div class="booking-step active" id="bookingStep1">
+                    <div class="booking-step-header">
+                        <span class="booking-step-num">1</span>
+                        <h3>Select Property Size</h3>
+                    </div>
+                    <div class="size-options">
+                        <button class="size-option" data-size="small" data-base-price="159" onclick="selectSize(this)">
+                            <span class="size-label">Up to 2,250 sq ft</span>
+                            <span class="size-price">From $159</span>
+                        </button>
+                        <button class="size-option" data-size="large" data-base-price="189" onclick="selectSize(this)">
+                            <span class="size-label">2,251 – 2,500 sq ft</span>
+                            <span class="size-price">From $189</span>
+                        </button>
+                    </div>
+                    <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
+                </div>
+
+                <!-- Step 2: Calendar Selection -->
+                <div class="booking-step" id="bookingStep2">
+                    <div class="booking-step-header">
+                        <span class="booking-step-num">2</span>
+                        <h3>Choose Date &amp; Time</h3>
+                    </div>
+                    <div class="calendar-wrapper" id="calendarWrapper">
+                        <!-- Interactive Calendar Demo -->
+                        <div class="demo-calendar" id="demoCalendar">
+                            <div class="cal-header">
+                                <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
+                                <span class="cal-month" id="calMonth"></span>
+                                <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
+                            </div>
+                            <div class="cal-weekdays">
+                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            </div>
+                            <div class="cal-days" id="calDays"></div>
+                        </div>
+                        <div class="time-slots" id="timeSlots">
+                            <p class="slots-prompt">Select a date to view available times</p>
+                        </div>
+                    </div>
+                    <p class="booking-note" id="pricingNote" style="display:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span id="pricingNoteText"></span>
+                    </p>
+                </div>
+
+                <!-- Step 3: Review & Pay -->
+                <div class="booking-step" id="bookingStep3">
+                    <div class="booking-step-header">
+                        <span class="booking-step-num">3</span>
+                        <h3>Review &amp; Pay</h3>
+                    </div>
+                    <div class="order-summary" id="orderSummary">
+                        <div class="summary-row">
+                            <span>Property Size</span>
+                            <span id="summarySize">—</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Appointment</span>
+                            <span id="summaryTime">—</span>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <span>Total Price</span>
+                            <span id="summaryPrice">—</span>
+                        </div>
+                        <p class="summary-trust">No surprises. Price shown is the price you pay.</p>
+                    </div>
+                    <div class="payment-options-inline">
+                        <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="handleStripeDemo()">
+                            <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><rect width="28" height="28" rx="5" fill="#635BFF"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
+                            Pay Now with Card
+                        </button>
+                        <span class="payment-or">or</span>
+                        <p class="payment-alt">Leave a check or cash at the property during the appointment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acuity Embed Zone (for final production) -->
+            <div class="acuity-production-note">
+                <p><em>Production site: The booking flow above will be replaced by the live Acuity Scheduling calendar with Stripe payments. This interactive demo shows the intended user experience.</em></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 5: HOW IT WORKS -->
     <!-- ============================================ -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
@@ -290,7 +299,7 @@
                         </svg>
                     </div>
                     <h3>Schedule Your Appointment</h3>
-                    <p>Pick a time that works for you. Book and pay online in under 2 minutes.</p>
+                    <p>Choose a time that works for you.</p>
                 </div>
                 <div class="step-connector">
                     <svg width="40" height="20" viewBox="0 0 40 20">
@@ -306,7 +315,7 @@
                         </svg>
                     </div>
                     <h3>We Complete the Assessment</h3>
-                    <p>A licensed assessor visits your home. Takes under 1 hour on-site.</p>
+                    <p>The on-site visit takes about 1 hour.</p>
                 </div>
                 <div class="step-connector">
                     <svg width="40" height="20" viewBox="0 0 40 20">
@@ -325,35 +334,7 @@
                         </svg>
                     </div>
                     <h3>Receive Your Official Score</h3>
-                    <p>Your certified Home Energy Score report — delivered in under 24 hours, 99% of the time.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- SECTION 5: SCHEDULE (Acuity Embed Placeholder) -->
-    <!-- ============================================ -->
-    <section class="schedule-section" id="schedule">
-        <div class="container">
-            <h2>Schedule Your Appointment Now</h2>
-            <p class="section-subtitle">Pick a date and time below. Book and pay in one step — no redirects.</p>
-
-            <!-- Acuity Scheduling Embed Placeholder -->
-            <div class="acuity-embed-wrapper">
-                <div class="acuity-placeholder" id="acuityPlaceholder">
-                    <div class="placeholder-inner">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                            <circle cx="12" cy="16" r="1" fill="#1F4E79"></circle>
-                        </svg>
-                        <h3>Acuity Scheduling Calendar</h3>
-                        <p>Your Acuity booking calendar will be embedded here.<br>Clients will book and pay via Stripe — all in one seamless step.</p>
-                        <span class="placeholder-note">[ Embed Code: Provided after Acuity account access ]</span>
-                    </div>
+                    <p>Delivered quickly after your appointment.</p>
                 </div>
             </div>
         </div>
@@ -368,7 +349,6 @@
             <div class="payment-grid">
                 <div class="payment-card">
                     <div class="payment-icon">
-                        <!-- Stripe-style credit card icon -->
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                             <line x1="1" y1="10" x2="23" y2="10"></line>
@@ -377,7 +357,6 @@
                     <h3>Pay Online Securely</h3>
                     <p>Credit or debit card accepted at booking.</p>
                     <div class="stripe-badge">
-                        <!-- Official Stripe wordmark "S" -->
                         <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
                             <rect width="28" height="28" rx="5" fill="#635BFF"/>
                             <path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/>
@@ -388,12 +367,13 @@
                 <div class="payment-card">
                     <div class="payment-icon">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
+                            <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <line x1="6" y1="15" x2="10" y2="15"></line>
                         </svg>
                     </div>
-                    <h3>Leave a Check</h3>
-                    <p>Simply leave a check at the property for pick-up during the assessment.</p>
+                    <h3>Leave a Check or Cash</h3>
+                    <p>Leave a check or cash at the property for pick-up during the appointment.</p>
                 </div>
             </div>
         </div>
@@ -408,7 +388,7 @@
             <div class="faq-list">
                 <details class="faq-item" open>
                     <summary>
-                        <span class="faq-question">How long does the assessment take?</span>
+                        <span class="faq-question">Time Required</span>
                         <span class="faq-toggle">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
@@ -419,7 +399,7 @@
                 </details>
                 <details class="faq-item">
                     <summary>
-                        <span class="faq-question">What do I need to prepare?</span>
+                        <span class="faq-question">Preparation</span>
                         <span class="faq-toggle">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
@@ -430,35 +410,13 @@
                 </details>
                 <details class="faq-item">
                     <summary>
-                        <span class="faq-question">When do I get the report?</span>
+                        <span class="faq-question">Report Timing</span>
                         <span class="faq-toggle">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </span>
                     </summary>
                     <div class="faq-answer">
                         <p>Less than 24 hours — 99% of the time. We know your timeline matters.</p>
-                    </div>
-                </details>
-                <details class="faq-item">
-                    <summary>
-                        <span class="faq-question">Is a Home Energy Score required for selling?</span>
-                        <span class="faq-toggle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>It depends on your location. <a href="https://www.portland.gov/bps/home-energy-score/check-your-address" target="_blank" rel="noopener">Check this site</a> to see if a score is required at your address.</p>
-                    </div>
-                </details>
-                <details class="faq-item">
-                    <summary>
-                        <span class="faq-question">What areas do you cover?</span>
-                        <span class="faq-toggle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>Portland metro area, including Hillsboro, Milwaukie, and the Salem metro area.</p>
                     </div>
                 </details>
             </div>
@@ -472,7 +430,7 @@
         <div class="container">
             <h2>Ready to Schedule?</h2>
             <p>Get your Home Energy Score done — fast, compliant, and hassle-free.</p>
-            <a href="#schedule" class="btn btn-primary btn-lg">Schedule &amp; Pay Now</a>
+            <a href="#schedule" class="btn btn-primary btn-lg">Book Your Energy Score</a>
             <p class="cta-phone">Or call directly: <a href="tel:5032906958">(503) 290-6958</a></p>
         </div>
     </section>
@@ -485,7 +443,7 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <span class="logo-mark" aria-hidden="true">
-                        <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <polyline points="8,34 32,12 56,34" stroke="#1F4E79" stroke-width="4.2" fill="none" stroke-linejoin="miter" stroke-linecap="square"/>
                             <line x1="11.6" y1="32.4" x2="11.6" y2="56" stroke="#1F4E79" stroke-width="4.2" stroke-linecap="square"/>
                             <line x1="52.4" y1="32.4" x2="52.4" y2="56" stroke="#1F4E79" stroke-width="4.2" stroke-linecap="square"/>
@@ -495,14 +453,12 @@
                         </svg>
                     </span>
                     <span class="logo-wordmark">
-                        <span class="logo-pdx">PDX</span>
-                        <span class="logo-sub">HOME ENERGY SCORE, LLC</span>
+                        <span class="logo-company footer-company">HOME ENERGY SCORE, LLC</span>
                     </span>
                 </div>
                 <div class="footer-info">
-                    <p>Oregon Contractor License #259388</p>
+                    <p>CCB# 259388</p>
                     <p><a href="tel:5032906958">(503) 290-6958</a></p>
-                    <p>Serving Portland &amp; Salem Metro Areas</p>
                 </div>
                 <div class="footer-bottom">
                     <p>&copy; 2026 PDX Home Energy Score, LLC. All rights reserved.</p>
@@ -520,6 +476,12 @@
         </svg>
         <span>Call Now</span>
     </a>
+
+    <!-- Stripe Demo Toast -->
+    <div class="stripe-toast" id="stripeToast">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>Stripe Checkout demo — in production this opens the real Stripe payment flow.</span>
+    </div>
 
     <script src="script.js"></script>
 </body>
