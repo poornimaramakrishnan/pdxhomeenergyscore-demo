@@ -1,350 +1,148 @@
-/* ============================================/* ============================================
+﻿/* ============================================
+   PDX Home Energy Score - JavaScript v2.1
+   Interactive Booking Flow + Stripe Elements Demo
+   ============================================ */
 
-   PDX Home Energy Score — JavaScript v2.0   PDX Home Energy Score — JavaScript
-
-   Interactive Booking Flow + Stripe Demo   Lightweight, no dependencies
-
-   ============================================ */   ============================================ */
-
-
-
-// ========== BOOKING STATE ==========document.addEventListener('DOMContentLoaded', function () {
-
-let bookingState = {
-
-    size: null,    // ---------- STICKY HEADER SHADOW ----------
-
-    basePrice: 0,    const header = document.getElementById('header');
-
-    selectedDate: null,    let lastScroll = 0;
-
+// ========== BOOKING STATE ==========
+var bookingState = {
+    size: null,
+    basePrice: 0,
+    selectedDate: null,
     selectedSlot: null,
+    finalPrice: 0
+};
 
-    finalPrice: 0    window.addEventListener('scroll', function () {
+var currentMonth = new Date().getMonth();
+var currentYear = new Date().getFullYear();
 
-};        const currentScroll = window.pageYOffset;
-
-        if (currentScroll > 20) {
-
-let currentMonth = new Date().getMonth();            header.classList.add('scrolled');
-
-let currentYear = new Date().getFullYear();        } else {
-
-            header.classList.remove('scrolled');
-
-// ========== DOM READY ==========        }
-
-document.addEventListener('DOMContentLoaded', function () {        lastScroll = currentScroll;
-
-    }, { passive: true });
+// ========== DOM READY ==========
+document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- STICKY HEADER SHADOW ----------
-
-    const header = document.getElementById('header');    // ---------- MOBILE NAV TOGGLE ----------
-
-    window.addEventListener('scroll', function () {    const mobileToggle = document.getElementById('mobileToggle');
-
-        if (window.pageYOffset > 20) {    const mainNav = document.getElementById('mainNav');
-
+    var header = document.getElementById('header');
+    window.addEventListener('scroll', function () {
+        if (window.pageYOffset > 20) {
             header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, { passive: true });
 
-        } else {    if (mobileToggle) {
+    // ---------- MOBILE NAV TOGGLE ----------
+    var mobileToggle = document.getElementById('mobileToggle');
+    var mainNav = document.getElementById('mainNav');
 
-            header.classList.remove('scrolled');        mobileToggle.addEventListener('click', function () {
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function () {
+            mainNav.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+        });
+    }
 
-        }            mainNav.classList.toggle('active');
-
-    }, { passive: true });            mobileToggle.classList.toggle('active');
-
-
-
-    // ---------- MOBILE NAV TOGGLE ----------            // Animate hamburger to X
-
-    const mobileToggle = document.getElementById('mobileToggle');            const spans = mobileToggle.querySelectorAll('span');
-
-    const mainNav = document.getElementById('mainNav');            if (mobileToggle.classList.contains('active')) {
-
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-
-    if (mobileToggle) {                spans[1].style.opacity = '0';
-
-        mobileToggle.addEventListener('click', function () {                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-
-            mainNav.classList.toggle('active');            } else {
-
-            mobileToggle.classList.toggle('active');                spans[0].style.transform = '';
-
-            const spans = mobileToggle.querySelectorAll('span');                spans[1].style.opacity = '';
-
-            if (mobileToggle.classList.contains('active')) {                spans[2].style.transform = '';
-
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';            }
-
-                spans[1].style.opacity = '0';        });
-
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';    }
-
-            } else {
-
-                spans[0].style.transform = '';    // Close mobile nav on link click
-
-                spans[1].style.opacity = '';    document.querySelectorAll('.nav-link').forEach(function (link) {
-
-                spans[2].style.transform = '';        link.addEventListener('click', function () {
-
-            }            mainNav.classList.remove('active');
-
-        });            if (mobileToggle) {
-
-    }                mobileToggle.classList.remove('active');
-
-                const spans = mobileToggle.querySelectorAll('span');
-
-    // Close mobile nav on link click                spans[0].style.transform = '';
-
-    document.querySelectorAll('.nav-link, .btn-nav').forEach(function (link) {                spans[1].style.opacity = '';
-
-        link.addEventListener('click', function () {                spans[2].style.transform = '';
-
-            mainNav.classList.remove('active');            }
-
-            if (mobileToggle) {        });
-
-                mobileToggle.classList.remove('active');    });
-
-                const spans = mobileToggle.querySelectorAll('span');
-
-                spans[0].style.transform = '';    // ---------- SMOOTH SCROLL (with header offset) ----------
-
-                spans[1].style.opacity = '';    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-
-                spans[2].style.transform = '';        anchor.addEventListener('click', function (e) {
-
-            }            const targetId = this.getAttribute('href');
-
-        });            if (targetId === '#') return;
-
+    // Close mobile nav when clicking a nav link
+    document.querySelectorAll('.nav-link, .btn-nav').forEach(function (link) {
+        link.addEventListener('click', function () {
+            if (mainNav) mainNav.classList.remove('active');
+            if (mobileToggle) mobileToggle.classList.remove('active');
+        });
     });
 
-            const target = document.querySelector(targetId);
-
-    // ---------- SMOOTH SCROLL (with header offset) ----------            if (target) {
-
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {                e.preventDefault();
-
-        anchor.addEventListener('click', function (e) {                const headerHeight = header.offsetHeight;
-
-            const targetId = this.getAttribute('href');                const targetPos = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-
-            if (targetId === '#') return;                window.scrollTo({
-
-            const target = document.querySelector(targetId);                    top: targetPos,
-
-            if (target) {                    behavior: 'smooth'
-
-                e.preventDefault();                });
-
-                const headerHeight = header.offsetHeight;            }
-
-                const targetPos = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;        });
-
-                window.scrollTo({ top: targetPos, behavior: 'smooth' });    });
-
+    // ---------- SMOOTH SCROLL ----------
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            var targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            var target = document.querySelector(targetId);
+            if (target) {
+                e.preventDefault();
+                var offset = target.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
             }
-
-        });    // ---------- SCROLL ANIMATIONS (Intersection Observer) ----------
-
-    });    const fadeElements = document.querySelectorAll(
-
-        '.badge-item, .price-card, .step-item, .payment-card, .faq-item, .addon-item'
-
-    // ---------- SCROLL ANIMATIONS ----------    );
-
-    const fadeElements = document.querySelectorAll(
-
-        '.badge-item, .price-card, .step-item, .payment-card, .faq-item, .size-option'    if ('IntersectionObserver' in window) {
-
-    );        const observer = new IntersectionObserver(function (entries) {
-
-            entries.forEach(function (entry, index) {
-
-    if ('IntersectionObserver' in window) {                if (entry.isIntersecting) {
-
-        const observer = new IntersectionObserver(function (entries) {                    // Stagger the animation
-
-            entries.forEach(function (entry) {                    const delay = Array.from(entry.target.parentElement.children)
-
-                if (entry.isIntersecting) {                        .indexOf(entry.target) * 100;
-
-                    const delay = Array.from(entry.target.parentElement.children)                    setTimeout(function () {
-
-                        .indexOf(entry.target) * 100;                        entry.target.classList.add('fade-in', 'visible');
-
-                    setTimeout(function () {                    }, delay);
-
-                        entry.target.classList.add('fade-in', 'visible');                    observer.unobserve(entry.target);
-
-                    }, delay);                }
-
-                    observer.unobserve(entry.target);            });
-
-                }        }, {
-
-            });            threshold: 0.1,
-
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });            rootMargin: '0px 0px -40px 0px'
-
         });
-
-        fadeElements.forEach(function (el) {
-
-            el.classList.add('fade-in');        fadeElements.forEach(function (el) {
-
-            observer.observe(el);            el.classList.add('fade-in');
-
-        });            observer.observe(el);
-
-    }        });
-
-    } else {
-
-    // ---------- ACTIVE NAV HIGHLIGHTING ----------        // Fallback: just show everything
-
-    const sections = document.querySelectorAll('section[id]');        fadeElements.forEach(function (el) {
-
-    const navLinks = document.querySelectorAll('.nav-link:not(.btn-nav):not(.nav-phone)');            el.style.opacity = '1';
-
-        });
-
-    window.addEventListener('scroll', function () {    }
-
-        let current = '';
-
-        sections.forEach(function (section) {    // ---------- ACTIVE NAV HIGHLIGHTING ----------
-
-            const sectionTop = section.offsetTop - 100;    const sections = document.querySelectorAll('section[id]');
-
-            if (window.pageYOffset >= sectionTop) {    const navLinks = document.querySelectorAll('.nav-link:not(.btn-nav)');
-
-                current = section.getAttribute('id');
-
-            }    window.addEventListener('scroll', function () {
-
-        });        let current = '';
-
-        navLinks.forEach(function (link) {        sections.forEach(function (section) {
-
-            link.style.color = '';            const sectionTop = section.offsetTop - 100;
-
-            link.style.fontWeight = '';            if (window.pageYOffset >= sectionTop) {
-
-            if (link.getAttribute('href') === '#' + current) {                current = section.getAttribute('id');
-
-                link.style.color = '#1F4E79';            }
-
-                link.style.fontWeight = '700';        });
-
-            }
-
-        });        navLinks.forEach(function (link) {
-
-    }, { passive: true });            link.style.color = '';
-
-            link.style.fontWeight = '';
-
-    // ---------- INIT CALENDAR ----------            if (link.getAttribute('href') === '#' + current) {
-
-    renderCalendar();                link.style.color = '#1F4E79';
-
-});                link.style.fontWeight = '700';
-
-            }
-
-// ========== SIZE SELECTION (Step 1) ==========        });
-
-function selectSize(btn) {    }, { passive: true });
-
-    // Deselect all
-
-    document.querySelectorAll('.size-option').forEach(function(el) {});
-
-        el.classList.remove('selected');
     });
-    btn.classList.add('selected');
 
-    bookingState.size = btn.dataset.size;
-    bookingState.basePrice = parseInt(btn.dataset.basePrice);
+    // ---------- FADE-IN ON SCROLL ----------
+    var fadeEls = document.querySelectorAll('.fade-in');
+    if (fadeEls.length > 0) {
+        var fadeObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        fadeEls.forEach(function (el) { fadeObserver.observe(el); });
+    }
 
-    // Move to step 2
-    setTimeout(function() {
-        showStep(2);
-    }, 300);
+    // ---------- RENDER INITIAL CALENDAR ----------
+    renderCalendar();
+
+}); // END DOMContentLoaded
+
+// ========== BOOKING FLOW ==========
+function showStep(step) {
+    for (var i = 1; i <= 3; i++) {
+        var el = document.getElementById('bookingStep' + i);
+        if (!el) continue;
+        el.classList.remove('active', 'completed');
+        if (i < step) el.classList.add('completed');
+        if (i === step) el.classList.add('active');
+    }
 }
 
-// ========== SHOW BOOKING STEP ==========
-function showStep(stepNum) {
-    var steps = document.querySelectorAll('.booking-step');
-    steps.forEach(function(step, idx) {
-        step.classList.remove('active', 'completed');
-        if (idx + 1 < stepNum) {
-            step.classList.add('completed');
-        } else if (idx + 1 === stepNum) {
-            step.classList.add('active');
-        }
-    });
+function selectSize(btn) {
+    document.querySelectorAll('.size-option').forEach(function (b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    bookingState.size = btn.getAttribute('data-size');
+    bookingState.basePrice = parseInt(btn.getAttribute('data-base-price'), 10);
+    setTimeout(function () { showStep(2); }, 300);
 }
 
 // ========== CALENDAR ==========
 function renderCalendar() {
-    var calMonth = document.getElementById('calMonth');
-    var calDays = document.getElementById('calDays');
-    if (!calMonth || !calDays) return;
-
     var monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                      'July', 'August', 'September', 'October', 'November', 'December'];
-
-    calMonth.textContent = monthNames[currentMonth] + ' ' + currentYear;
-    calDays.innerHTML = '';
+        'July', 'August', 'September', 'October', 'November', 'December'];
+    var calMonthEl = document.getElementById('calMonth');
+    if (calMonthEl) calMonthEl.textContent = monthNames[currentMonth] + ' ' + currentYear;
 
     var firstDay = new Date(currentYear, currentMonth, 1).getDay();
     var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     var today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    // Empty cells for days before 1st
-    for (var i = 0; i < firstDay; i++) {
-        var empty = document.createElement('div');
-        empty.className = 'cal-day cal-day-empty';
-        calDays.appendChild(empty);
+    var calDays = document.getElementById('calDays');
+    if (!calDays) return;
+    var html = '';
+
+    // Empty slots before first day
+    for (var e = 0; e < firstDay; e++) {
+        html += '<div class="cal-day cal-day-empty"></div>';
     }
 
-    // Day cells
     for (var d = 1; d <= daysInMonth; d++) {
-        var dayEl = document.createElement('button');
-        dayEl.className = 'cal-day';
-        dayEl.textContent = d;
+        var date = new Date(currentYear, currentMonth, d);
+        var dateStr = currentYear + '-' + String(currentMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+        var dayOfWeek = date.getDay();
 
-        var thisDate = new Date(currentYear, currentMonth, d);
-        var isPast = thisDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        var isToday = (d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
-
-        if (isPast) {
-            dayEl.classList.add('cal-day-disabled');
+        var classes = 'cal-day';
+        if (date < today) {
+            classes += ' cal-day-disabled';
+            html += '<div class="' + classes + '">' + d + '</div>';
+        } else if (date.getTime() === today.getTime()) {
+            classes += ' cal-day-today cal-day-available';
+            html += '<button class="' + classes + '" onclick="selectDate(\'' + dateStr + '\', this)">' + d + '</button>';
+        } else if (dayOfWeek === 0) {
+            // Sundays disabled
+            classes += ' cal-day-disabled';
+            html += '<div class="' + classes + '">' + d + '</div>';
         } else {
-            // Make weekdays available (demo: skip Sundays for realism)
-            if (thisDate.getDay() !== 0) {
-                dayEl.classList.add('cal-day-available');
-            }
-            dayEl.setAttribute('data-date', currentYear + '-' + (currentMonth + 1) + '-' + d);
-            dayEl.setAttribute('data-day-of-week', thisDate.getDay());
-            dayEl.onclick = function() { selectDay(this); };
+            classes += ' cal-day-available';
+            html += '<button class="' + classes + '" onclick="selectDate(\'' + dateStr + '\', this)">' + d + '</button>';
         }
-
-        if (isToday) {
-            dayEl.classList.add('cal-day-today');
-        }
-
-        calDays.appendChild(dayEl);
     }
+
+    calDays.innerHTML = html;
 }
 
 function changeMonth(dir) {
@@ -354,125 +152,195 @@ function changeMonth(dir) {
     renderCalendar();
 }
 
-function selectDay(el) {
-    // Deselect all days
-    document.querySelectorAll('.cal-day').forEach(function(d) {
-        d.classList.remove('cal-day-selected');
-    });
+function selectDate(dateStr, el) {
+    document.querySelectorAll('.cal-day').forEach(function (d) { d.classList.remove('cal-day-selected'); });
     el.classList.add('cal-day-selected');
+    bookingState.selectedDate = dateStr;
 
-    bookingState.selectedDate = el.getAttribute('data-date');
-    var dayOfWeek = parseInt(el.getAttribute('data-day-of-week'));
+    var note = document.getElementById('pricingNote');
+    var noteText = document.getElementById('pricingNoteText');
+    var dateParts = dateStr.split('-');
+    var date = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+    var dayOfWeek = date.getDay();
 
-    // Generate time slots based on day
-    generateTimeSlots(dayOfWeek);
-}
-
-function generateTimeSlots(dayOfWeek) {
-    var slotsContainer = document.getElementById('timeSlots');
-    var pricingNote = document.getElementById('pricingNote');
-    var pricingNoteText = document.getElementById('pricingNoteText');
-
-    // Show pricing explanation
-    if (pricingNote) {
-        pricingNote.style.display = 'flex';
-        pricingNoteText.textContent = 'Prices vary based on day and time. Weekday daytime slots offer the best rates.';
+    if (dayOfWeek === 6) {
+        if (note) note.style.display = 'flex';
+        if (noteText) noteText.textContent = 'Weekend appointments have adjusted pricing.';
+    } else {
+        if (note) note.style.display = 'none';
     }
 
-    var basePrice = bookingState.basePrice || 159;
+    renderTimeSlots(dateStr, dayOfWeek);
+}
+
+function renderTimeSlots(dateStr, dayOfWeek) {
+    var slotsContainer = document.getElementById('timeSlots');
+    if (!slotsContainer) return;
+
+    var base = bookingState.basePrice;
     var slots = [];
 
     if (dayOfWeek === 6) {
         // Saturday
         slots = [
-            { time: '9:00 AM', price: basePrice + 20, tag: 'weekend', tagLabel: 'Sat' },
-            { time: '10:00 AM', price: basePrice + 20, tag: 'weekend', tagLabel: 'Sat' },
-            { time: '11:00 AM', price: basePrice + 20, tag: 'weekend', tagLabel: 'Sat' },
-            { time: '1:00 PM', price: basePrice + 20, tag: 'weekend', tagLabel: 'Sat' },
-            { time: '2:00 PM', price: basePrice + 20, tag: 'weekend', tagLabel: 'Sat' }
+            { time: '9:00 AM', price: base + 20, tag: 'weekend', tagLabel: 'Weekend' },
+            { time: '10:00 AM', price: base + 20, tag: 'weekend', tagLabel: 'Weekend' },
+            { time: '11:00 AM', price: base + 20, tag: 'weekend', tagLabel: 'Weekend' }
         ];
     } else {
-        // Weekday
         slots = [
-            { time: '9:00 AM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '10:00 AM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '11:00 AM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '1:00 PM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '2:00 PM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '3:00 PM', price: basePrice, tag: 'best-rate', tagLabel: 'Best Rate' },
-            { time: '5:00 PM', price: basePrice + 20, tag: 'evening', tagLabel: 'Evening' },
-            { time: '6:00 PM', price: basePrice + 20, tag: 'evening', tagLabel: 'Evening' }
+            { time: '9:00 AM', price: base, tag: 'best-rate', tagLabel: 'Best Rate' },
+            { time: '10:00 AM', price: base, tag: 'best-rate', tagLabel: 'Best Rate' },
+            { time: '11:00 AM', price: base, tag: '', tagLabel: '' },
+            { time: '1:00 PM', price: base, tag: '', tagLabel: '' },
+            { time: '2:00 PM', price: base, tag: '', tagLabel: '' },
+            { time: '4:00 PM', price: base + 10, tag: 'evening', tagLabel: 'Evening' },
+            { time: '5:00 PM', price: base + 10, tag: 'evening', tagLabel: 'Evening' }
         ];
     }
 
     var html = '<div class="time-slot-list">';
-    slots.forEach(function(slot) {
-        html += '<button class="time-slot" onclick="selectSlot(this, ' + slot.price + ', \'' + slot.time + '\')">';
-        html += '<span class="time-slot-time">' + slot.time;
-        html += '<span class="time-slot-tag ' + slot.tag + '">' + slot.tagLabel + '</span>';
-        html += '</span>';
-        html += '<span class="time-slot-price">$' + slot.price + '</span>';
+    for (var i = 0; i < slots.length; i++) {
+        var s = slots[i];
+        var tagHtml = s.tag ? '<span class="time-slot-tag ' + s.tag + '">' + s.tagLabel + '</span>' : '';
+        html += '<button class="time-slot" onclick="selectSlot(this,' + s.price + ',\'' + s.time + '\')">';
+        html += '<span class="time-slot-time">' + s.time + tagHtml + '</span>';
+        html += '<span class="time-slot-price">$' + s.price + '</span>';
         html += '</button>';
-    });
+    }
     html += '</div>';
-
     slotsContainer.innerHTML = html;
 }
 
 function selectSlot(el, price, time) {
-    // Deselect all slots
-    document.querySelectorAll('.time-slot').forEach(function(s) {
-        s.classList.remove('selected');
-    });
+    document.querySelectorAll('.time-slot').forEach(function (s) { s.classList.remove('selected'); });
     el.classList.add('selected');
-
     bookingState.selectedSlot = time;
     bookingState.finalPrice = price;
-
-    // Move to step 3
-    setTimeout(function() {
+    setTimeout(function () {
         showStep(3);
         updateOrderSummary();
     }, 300);
 }
 
 function updateOrderSummary() {
-    var sizeLabel = bookingState.size === 'small' ? 'Up to 2,250 sq ft' : '2,251 – 2,500 sq ft';
-
+    var sizeLabel = bookingState.size === 'small' ? 'Up to 2,250 sq ft' : '2,251 - 2,500 sq ft';
     var dateParts = bookingState.selectedDate.split('-');
     var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var dateLabel = monthNames[parseInt(dateParts[1]) - 1] + ' ' + dateParts[2] + ', ' + dateParts[0] + ' at ' + bookingState.selectedSlot;
-
     document.getElementById('summarySize').textContent = sizeLabel;
     document.getElementById('summaryTime').textContent = dateLabel;
     document.getElementById('summaryPrice').textContent = '$' + bookingState.finalPrice;
 }
 
-// ========== STRIPE DEMO ==========
-function handleStripeDemo() {
-    // In production, this would create a Stripe Checkout session
-    // For demo purposes, show a toast notification
-    var toast = document.getElementById('stripeToast');
-    if (toast) {
-        toast.classList.add('show');
-        setTimeout(function() {
-            toast.classList.remove('show');
-        }, 5000);
+// ========== STRIPE ELEMENTS DEMO ==========
+var _stripeInstance = null;
+var _stripeElements = null;
+var _cardNumberEl = null;
+var _cardExpiryEl = null;
+var _cardCvcEl = null;
+var _stripeReady = false;
+
+function openStripeDemo() {
+    var price = (bookingState && bookingState.finalPrice) ? bookingState.finalPrice : 159;
+    var priceEl = document.querySelector('.stripe-order-price');
+    if (priceEl) priceEl.textContent = '$' + price + '.00';
+    var submitBtn = document.getElementById('stripeSubmitBtn');
+    if (submitBtn) submitBtn.textContent = 'Pay $' + price + '.00 \u2014 Test Mode';
+
+    var overlay = document.getElementById('stripeModalOverlay');
+    if (overlay) {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
 
-    // Attempt real Stripe Checkout redirect (test mode)
-    // The publishable key is used client-side; the actual session would
-    // be created by a server-side endpoint in production.
+    if (!_stripeReady) {
+        try {
+            _stripeInstance = Stripe('pk_test_51SeKxiJoivhtUXw7DZW5HvmkdNGnFRodqNd1cnPmoZoY9C3zGZIfpXXQIYRajz5FGuJrQLKT27wdmR49jhoPfVoR00LYrpA2Pv');
+            _stripeElements = _stripeInstance.elements();
+            var elemStyle = {
+                base: {
+                    fontSize: '16px',
+                    color: '#2D2D2D',
+                    fontFamily: 'Inter, -apple-system, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    '::placeholder': { color: '#aab7c4' }
+                },
+                invalid: { color: '#e53e3e', iconColor: '#e53e3e' }
+            };
+            _cardNumberEl = _stripeElements.create('cardNumber', { style: elemStyle, showIcon: true });
+            _cardExpiryEl = _stripeElements.create('cardExpiry', { style: elemStyle });
+            _cardCvcEl    = _stripeElements.create('cardCvc',    { style: elemStyle });
+            _cardNumberEl.mount('#stripe-card-element');
+            _cardExpiryEl.mount('#stripe-expiry-element');
+            _cardCvcEl.mount('#stripe-cvc-element');
+            _cardNumberEl.on('change', function (e) {
+                var errEl = document.getElementById('stripe-card-errors');
+                if (errEl) errEl.textContent = (e.error) ? e.error.message : '';
+            });
+            _stripeReady = true;
+        } catch (err) {
+            console.error('Stripe init error:', err);
+        }
+    }
+}
+
+function closeStripeModal(event) {
+    if (event && event.target.id !== 'stripeModalOverlay') return;
+    _doCloseStripeModal();
+}
+
+function closeStripeModalBtn() {
+    _doCloseStripeModal();
+}
+
+function _doCloseStripeModal() {
+    var overlay = document.getElementById('stripeModalOverlay');
+    if (overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    var wrapper = document.getElementById('stripe-card-element-wrapper');
+    var success = document.getElementById('stripe-success-msg');
+    if (wrapper) wrapper.style.display = 'block';
+    if (success) success.style.display = 'none';
+    var submitBtn = document.getElementById('stripeSubmitBtn');
+    var price = (bookingState && bookingState.finalPrice) ? bookingState.finalPrice : 159;
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Pay $' + price + '.00 \u2014 Test Mode';
+    }
+    var errEl = document.getElementById('stripe-card-errors');
+    if (errEl) errEl.textContent = '';
+}
+
+async function submitStripeDemo() {
+    if (!_stripeInstance || !_cardNumberEl) return;
+    var submitBtn = document.getElementById('stripeSubmitBtn');
+    var errEl = document.getElementById('stripe-card-errors');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing\u2026';
+    if (errEl) errEl.textContent = '';
+
     try {
-        var stripe = Stripe('pk_test_51SeKxiJoivhtUXw7DZW5HvmkdNGnFRodqNd1cnPmoZoY9C3zGZIfpXXQIYRajz5FGuJrQLKT27wdmR49jhoPfVoR00LYrpA2Pv');
-        console.log('Stripe initialized (test mode). In production, this creates a checkout session server-side.');
-        console.log('Booking summary:', {
-            size: bookingState.size,
-            date: bookingState.selectedDate,
-            time: bookingState.selectedSlot,
-            price: bookingState.finalPrice
+        var result = await _stripeInstance.createPaymentMethod({
+            type: 'card',
+            card: _cardNumberEl
         });
-    } catch(e) {
-        console.log('Stripe demo mode — no server-side session available.');
+        if (result.error) {
+            if (errEl) errEl.textContent = result.error.message;
+            submitBtn.disabled = false;
+            var price = (bookingState && bookingState.finalPrice) ? bookingState.finalPrice : 159;
+            submitBtn.textContent = 'Pay $' + price + '.00 \u2014 Test Mode';
+        } else {
+            var wrapper = document.getElementById('stripe-card-element-wrapper');
+            var success = document.getElementById('stripe-success-msg');
+            if (wrapper) wrapper.style.display = 'none';
+            if (success) success.style.display = 'block';
+            console.log('Stripe test payment method created:', result.paymentMethod.id);
+        }
+    } catch (err) {
+        if (errEl) errEl.textContent = 'An error occurred. Please try again.';
+        submitBtn.disabled = false;
     }
 }

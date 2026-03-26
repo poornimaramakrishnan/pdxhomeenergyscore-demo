@@ -264,8 +264,8 @@
                         <p class="summary-trust">No surprises. Price shown is the price you pay.</p>
                     </div>
                     <div class="payment-options-inline">
-                        <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="handleStripeDemo()">
-                            <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><rect width="28" height="28" rx="5" fill="#635BFF"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
+                        <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="openStripeDemo()">
+                            <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
                             Pay Now with Card
                         </button>
                         <span class="payment-or">or</span>
@@ -347,7 +347,7 @@
         <div class="container">
             <h2>Payment Options</h2>
             <div class="payment-grid">
-                <div class="payment-card">
+                <div class="payment-card payment-card-interactive">
                     <div class="payment-icon">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
@@ -355,7 +355,15 @@
                         </svg>
                     </div>
                     <h3>Pay Online Securely</h3>
-                    <p>Credit or debit card accepted at booking.</p>
+                    <p>Credit or debit card accepted at booking. Powered by Stripe — safe and encrypted.</p>
+                    <button class="btn btn-primary btn-pay-demo" onclick="openStripeDemo()">
+                        <svg width="18" height="18" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+                            <rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/>
+                            <path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/>
+                        </svg>
+                        Try Demo Payment
+                    </button>
+                    <p class="payment-demo-note">🔒 Stripe test mode — use card <strong>4242 4242 4242 4242</strong></p>
                     <div class="stripe-badge">
                         <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
                             <rect width="28" height="28" rx="5" fill="#635BFF"/>
@@ -378,6 +386,57 @@
             </div>
         </div>
     </section>
+
+    <!-- Stripe Demo Modal -->
+    <div class="stripe-modal-overlay" id="stripeModalOverlay" onclick="closeStripeModal(event)">
+        <div class="stripe-modal" id="stripeModal">
+            <button class="stripe-modal-close" onclick="closeStripeModalBtn()" aria-label="Close">&times;</button>
+            <div class="stripe-modal-header">
+                <svg width="32" height="32" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="28" height="28" rx="5" fill="#635BFF"/>
+                    <path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/>
+                </svg>
+                <div>
+                    <h3>Stripe Demo — Test Mode</h3>
+                    <p>No real charges. Safe to test.</p>
+                </div>
+            </div>
+            <div id="stripe-card-element-wrapper">
+                <div class="stripe-order-line">
+                    <span>Home Energy Score (Up to 2,250 sq ft)</span>
+                    <span class="stripe-order-price">$159.00</span>
+                </div>
+                <label class="stripe-label">Card number</label>
+                <div id="stripe-card-element" class="stripe-input-box">
+                    <!-- Stripe Elements mounts here -->
+                </div>
+                <div class="stripe-card-row">
+                    <div>
+                        <label class="stripe-label">Expiry</label>
+                        <div id="stripe-expiry-element" class="stripe-input-box"></div>
+                    </div>
+                    <div>
+                        <label class="stripe-label">CVC</label>
+                        <div id="stripe-cvc-element" class="stripe-input-box"></div>
+                    </div>
+                </div>
+                <div id="stripe-card-errors" class="stripe-error-msg" role="alert"></div>
+                <p class="stripe-test-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#635BFF" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Test card: <strong>4242 4242 4242 4242</strong> · Any future date · Any 3-digit CVC
+                </p>
+                <button class="btn btn-primary btn-stripe-pay" id="stripeSubmitBtn" onclick="submitStripeDemo()">
+                    Pay $159.00 — Test Mode
+                </button>
+            </div>
+            <div id="stripe-success-msg" class="stripe-success" style="display:none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+                <h3>Payment Demo Successful!</h3>
+                <p>In production, your card would be charged and a confirmation email sent. This confirms Stripe is fully integrated and ready.</p>
+                <button class="btn btn-outline" onclick="closeStripeModalBtn()">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================ -->
     <!-- SECTION 7: FAQ -->
