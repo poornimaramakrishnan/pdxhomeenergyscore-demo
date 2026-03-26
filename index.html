@@ -28,9 +28,6 @@
 
     <link rel="stylesheet" href="styles.css">
 
-    <!-- Stripe.js for demo payment -->
-    <script src="https://js.stripe.com/v3/"></script>
-
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
     {
@@ -258,25 +255,22 @@
     <section class="schedule-section" id="schedule">
         <div class="container container-wide">
             <h2>Schedule Your Appointment Now</h2>
-            <p class="section-subtitle">Pricing is based on appointment time and availability.</p>
+            <p class="section-subtitle">Select your home size, then pick a date and time. Payment is collected securely at booking via Stripe.</p>
 
-            <!-- Booking Flow Demo -->
+            <!-- Step 1: Select appointment type (our beautiful UI) -->
             <div class="booking-flow" id="bookingFlow">
-
-                <!-- Step 1: Property Size Selection -->
                 <div class="booking-step active" id="bookingStep1">
-                    <div class="booking-step-header" onclick="stepHeaderClick(1)">
+                    <div class="booking-step-header">
                         <span class="booking-step-num">1</span>
                         <h3>Select Property Size</h3>
-                        <span class="booking-step-summary" id="stepSummary1"></span>
                     </div>
                     <div class="booking-step-body">
                         <div class="size-options">
-                            <button class="size-option" data-size="small" data-base-price="159" onclick="selectSize(this)">
+                            <button class="size-option" onclick="selectAcuityType('small')">
                                 <span class="size-label">Up to 2,250 sq ft</span>
                                 <span class="size-price">From $159</span>
                             </button>
-                            <button class="size-option" data-size="large" data-base-price="189" onclick="selectSize(this)">
+                            <button class="size-option" onclick="selectAcuityType('large')">
                                 <span class="size-label">2,251 – 2,500 sq ft</span>
                                 <span class="size-price">From $189</span>
                             </button>
@@ -284,82 +278,32 @@
                         <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
                     </div>
                 </div>
+            </div>
 
-                <!-- Step 2: Calendar Selection -->
-                <div class="booking-step" id="bookingStep2">
-                    <div class="booking-step-header" onclick="stepHeaderClick(2)">
-                        <span class="booking-step-num">2</span>
-                        <h3>Choose Date &amp; Time</h3>
-                        <span class="booking-step-summary" id="stepSummary2"></span>
-                    </div>
-                    <div class="booking-step-body">
-                        <div class="calendar-wrapper" id="calendarWrapper">
-                            <!-- Interactive Calendar Demo -->
-                            <div class="demo-calendar" id="demoCalendar">
-                                <div class="cal-header">
-                                    <button class="cal-nav" onclick="changeMonth(-1)">&#8249;</button>
-                                    <span class="cal-month" id="calMonth"></span>
-                                    <button class="cal-nav" onclick="changeMonth(1)">&#8250;</button>
-                                </div>
-                                <div class="cal-weekdays">
-                                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-                                </div>
-                                <div class="cal-days" id="calDays"></div>
-                            </div>
-                            <div class="time-slots" id="timeSlots">
-                                <p class="slots-prompt">Select a date to view available times</p>
-                            </div>
+            <!-- Step 2: Acuity handles date/time, intake form, and payment -->
+            <div class="acuity-embed-section" id="acuityEmbed" style="display:none;">
+                <div class="acuity-embed-header">
+                    <div class="acuity-step-badge">
+                        <span class="booking-step-num acuity-step-num">2</span>
+                        <div>
+                            <h3 class="acuity-embed-title">Choose Date, Time &amp; Complete Booking</h3>
+                            <p class="acuity-embed-desc" id="acuitySelectedType">Pick an available slot, fill in your details, and pay securely — all in one step.</p>
                         </div>
-                        <p class="booking-note" id="pricingNote" style="display:none;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            <span id="pricingNoteText"></span>
-                        </p>
                     </div>
+                    <button class="btn btn-outline btn-sm" onclick="changeSize()">← Change Size</button>
                 </div>
-
-                <!-- Step 3: Review & Pay -->
-                <div class="booking-step" id="bookingStep3">
-                    <div class="booking-step-header">
-                        <span class="booking-step-num">3</span>
-                        <h3>Review &amp; Pay</h3>
-                        <span class="booking-step-summary" id="stepSummary3"></span>
-                    </div>
-                    <div class="booking-step-body">
-                        <div class="order-summary" id="orderSummary">
-                            <div class="summary-row">
-                                <span>Property Size</span>
-                                <span id="summarySize">—</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Appointment</span>
-                                <span id="summaryTime">—</span>
-                            </div>
-                            <div class="summary-row summary-total">
-                                <span>Total Price</span>
-                                <span id="summaryPrice">—</span>
-                            </div>
-                            <p class="summary-trust">No surprises. Price shown is the price you pay.</p>
-                        </div>
-                        <div class="payment-options-inline">
-                            <button class="btn btn-primary btn-lg" id="payStripeBtn" onclick="openStripeDemo()">
-                                <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/><path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/></svg>
-                                Pay Now with Card
-                            </button>
-                            <span class="payment-or">or</span>
-                            <p class="payment-alt">Leave a check or cash at the property during the appointment.</p>
-                        </div>
-                    </div>
+                <div class="acuity-iframe-wrapper" id="acuityIframeWrapper">
+                    <!-- iframe injected dynamically with correct appointmentType param -->
+                </div>
+                <div class="acuity-footer-note">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Secure payment via Stripe &bull; Confirmation email sent instantly &bull; Free cancellation with 24hr notice</span>
                 </div>
             </div>
 
-            <!-- Acuity Embed Zone (for final production) -->
-            <div class="acuity-embed-section" id="acuityEmbed">
-                <h3 class="acuity-embed-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    Live Scheduling — Book &amp; Pay Now via Acuity
-                </h3>
-                <p class="acuity-embed-desc">Select your home size below to see real availability and book instantly.</p>
-                <iframe src="https://app.acuityscheduling.com/schedule.php?owner=37810233" title="Schedule Appointment" width="100%" height="800" frameBorder="0" style="border:none; border-radius:12px;"></iframe>
+            <!-- Alternative: can't book online -->
+            <div class="booking-alt-note">
+                <p>Prefer to book by phone? Call <a href="tel:5032906958">(503) 290-6958</a> &bull; Payment by check or cash also accepted at the property.</p>
             </div>
         </div>
     </section>
@@ -430,23 +374,15 @@
         <div class="container">
             <h2>Payment Options</h2>
             <div class="payment-grid">
-                <div class="payment-card payment-card-interactive">
+                <div class="payment-card">
                     <div class="payment-icon">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                             <line x1="1" y1="10" x2="23" y2="10"></line>
                         </svg>
                     </div>
-                    <h3>Pay Online Securely</h3>
-                    <p>Credit or debit card accepted at booking. Powered by Stripe — safe and encrypted.</p>
-                    <button class="btn btn-primary btn-pay-demo" onclick="openStripeDemo()">
-                        <svg width="18" height="18" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-                            <rect width="28" height="28" rx="5" fill="#fff" fill-opacity="0.25"/>
-                            <path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/>
-                        </svg>
-                        Try Demo Payment
-                    </button>
-                    <p class="payment-demo-note">🔒 Stripe test mode — use card <strong>4242 4242 4242 4242</strong></p>
+                    <h3>Pay Online at Booking</h3>
+                    <p>Credit or debit card accepted securely during online booking. Powered by Stripe — safe and encrypted.</p>
                     <div class="stripe-badge">
                         <svg width="20" height="20" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
                             <rect width="28" height="28" rx="5" fill="#635BFF"/>
@@ -469,57 +405,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Stripe Demo Modal -->
-    <div class="stripe-modal-overlay" id="stripeModalOverlay" onclick="closeStripeModal(event)">
-        <div class="stripe-modal" id="stripeModal">
-            <button class="stripe-modal-close" onclick="closeStripeModalBtn()" aria-label="Close">&times;</button>
-            <div class="stripe-modal-header">
-                <svg width="32" height="32" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="28" height="28" rx="5" fill="#635BFF"/>
-                    <path d="M13.3 11.1c0-.8.7-1.1 1.8-1.1 1.6 0 3.7.5 5.3 1.4V7.2C18.8 6.4 17 6 15.1 6c-4 0-6.7 2.1-6.7 5.6 0 5.5 7.6 4.6 7.6 7 0 .9-.8 1.2-2 1.2-1.7 0-3.9-.7-5.6-1.7v4.3c1.9.8 3.8 1.1 5.6 1.1 4.1 0 6.9-2 6.9-5.6-.1-5.9-7.6-4.9-7.6-7z" fill="white"/>
-                </svg>
-                <div>
-                    <h3>Stripe Demo — Test Mode</h3>
-                    <p>No real charges. Safe to test.</p>
-                </div>
-            </div>
-            <div id="stripe-card-element-wrapper">
-                <div class="stripe-order-line">
-                    <span>Home Energy Score (Up to 2,250 sq ft)</span>
-                    <span class="stripe-order-price">$159.00</span>
-                </div>
-                <label class="stripe-label">Card number</label>
-                <div id="stripe-card-element" class="stripe-input-box">
-                    <!-- Stripe Elements mounts here -->
-                </div>
-                <div class="stripe-card-row">
-                    <div>
-                        <label class="stripe-label">Expiry</label>
-                        <div id="stripe-expiry-element" class="stripe-input-box"></div>
-                    </div>
-                    <div>
-                        <label class="stripe-label">CVC</label>
-                        <div id="stripe-cvc-element" class="stripe-input-box"></div>
-                    </div>
-                </div>
-                <div id="stripe-card-errors" class="stripe-error-msg" role="alert"></div>
-                <p class="stripe-test-hint">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#635BFF" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    Test card: <strong>4242 4242 4242 4242</strong> · Any future date · Any 3-digit CVC
-                </p>
-                <button class="btn btn-primary btn-stripe-pay" id="stripeSubmitBtn" onclick="submitStripeDemo()">
-                    Pay $159.00 — Test Mode
-                </button>
-            </div>
-            <div id="stripe-success-msg" class="stripe-success" style="display:none;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
-                <h3>Payment Demo Successful!</h3>
-                <p>In production, your card would be charged and a confirmation email sent. This confirms Stripe is fully integrated and ready.</p>
-                <button class="btn btn-outline" onclick="closeStripeModalBtn()">Close</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ============================================ -->
     <!-- SECTION 7: FAQ -->
@@ -661,12 +546,6 @@
         </svg>
         <span>Call Now</span>
     </a>
-
-    <!-- Stripe Demo Toast -->
-    <div class="stripe-toast" id="stripeToast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        <span>Stripe Checkout demo — in production this opens the real Stripe payment flow.</span>
-    </div>
 
     <script src="script.js"></script>
 </body>
