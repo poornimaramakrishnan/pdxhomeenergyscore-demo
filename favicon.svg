@@ -1,12 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <rect width="32" height="32" rx="5" fill="#1F4E79"/>
   <!-- House roof -->
-  <polyline points="3,16 16,5 29,16" stroke="white" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-  <!-- Walls -->
-  <line x1="5.5" y1="15" x2="5.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-  <line x1="26.5" y1="15" x2="26.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-  <line x1="5.5" y1="27" x2="26.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-  <!-- Leaf -->
-  <path d="M16,9 C16,9 11,14 12,19 C13,22 16,22 16,22 C16,22 19,22 20,19 C21,14 16,9 16,9 Z" fill="#5BA94B"/>
-  <line x1="16" y1="10" x2="16" y2="21.5" stroke="white" stroke-width="0.9" stroke-linecap="round"/>
+  <polyline points="3,16 16,5 29,16" stroke="white" stroke-width="2.2" fill="none" stroke-linejoin="miter" stroke-linecap="square"/>
+  <!-- Left wall -->
+  <line x1="5.5" y1="15" x2="5.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="square"/>
+  <!-- Right wall -->
+  <line x1="26.5" y1="15" x2="26.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="square"/>
+  <!-- Base -->
+  <line x1="5.5" y1="27" x2="26.5" y2="27" stroke="white" stroke-width="2.2" stroke-linecap="square"/>
+  <!-- Leaf: matches logo — tip leans/bends right, left side curves wider -->
+  <path d="M16,8 C16,8 10,14 11.5,20 C12.5,23.5 16,23.5 16,23.5
+           C16,23.5 19.5,23.5 20.5,20 C22,14 16,8 16,8 Z"
+        fill="#5BA94B"/>
+  <!-- Centre vein -->
+  <line x1="16" y1="9.5" x2="16" y2="23" stroke="white" stroke-width="0.9" stroke-linecap="round"/>
 </svg>
