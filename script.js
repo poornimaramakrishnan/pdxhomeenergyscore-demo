@@ -6,6 +6,9 @@
 // ========== ACUITY CONFIG ==========
 var ACUITY_OWNER = '37810233';
 var ACUITY_BASE  = 'https://app.acuityscheduling.com/schedule.php';
+// Exclusive appointment-type IDs (one service shown per size selection)
+var ACUITY_TYPE_SMALL = '86793971';  // Home Energy Score – Up to 2,250 sq ft
+var ACUITY_TYPE_LARGE = '86794016';  // Home Energy Score – 2,251 to 2,500 sq ft
 
 // ========== DOM READY ==========
 document.addEventListener('DOMContentLoaded', function () {
@@ -88,9 +91,11 @@ function selectAcuityType(size) {
         step1.classList.add('completed');
     }
 
-    // Build the Acuity iframe URL
-    // notHeader=1 hides the Sign Up / Login header links inside the embed
-    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&notHeader=1';
+    // Build the Acuity iframe URL with the correct appointmentType
+    // Each size maps to its own Acuity appointment type so only the
+    // relevant service is shown inside the embed (no extra choices).
+    var typeId = (size === 'small') ? ACUITY_TYPE_SMALL : ACUITY_TYPE_LARGE;
+    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&appointmentType=' + typeId + '&notHeader=1';
 
     // Update the description text
     var descEl = document.getElementById('acuitySelectedType');
