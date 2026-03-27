@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Confirmation — Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #F7F8FA;
+      color: #2D2D2D;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ── Preview label ── */
+    .preview-label {
+      background: #1F4E79;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      opacity: 0.85;
+    }
+
+    /* ── Confirmation banner — exact copy from styles.css ── */
+    .confirm-wrap {
+      max-width: 640px;
+      width: 100%;
+    }
+    .acuity-confirm-inner {
+      background: #ffffff;
+      border: 2px solid #5BA94B;
+      border-radius: 16px;
+      padding: 40px 36px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(31, 78, 121, 0.10);
+    }
+    .acuity-confirm-icon {
+      width: 60px;
+      height: 60px;
+      background: #5BA94B;
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 2rem;
+      line-height: 60px;
+      margin: 0 auto 20px;
+      font-weight: 700;
+    }
+    .acuity-confirm-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1F4E79;
+      margin: 0 0 12px;
+    }
+    .acuity-confirm-body {
+      font-size: 1.05rem;
+      color: #2D2D2D;
+      margin: 0 0 16px;
+      line-height: 1.6;
+    }
+    .acuity-confirm-contact {
+      font-size: 0.95rem;
+      color: #555;
+      margin: 0;
+    }
+    .acuity-confirm-contact a {
+      color: #1F4E79;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ── What happens next checklist ── */
+    .next-steps {
+      max-width: 640px;
+      width: 100%;
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 32px;
+      border: 1px solid #e0e8f0;
+      box-shadow: 0 4px 16px rgba(31,78,121,0.06);
+    }
+    .next-steps h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1F4E79;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .next-steps ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .next-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: #2D2D2D;
+      line-height: 1.5;
+    }
+    .next-steps li .step-dot {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: #1F4E79;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* ── Note at bottom ── */
+    .preview-note {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: #999;
+      text-align: center;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .acuity-confirm-inner { padding: 28px 20px; }
+      .acuity-confirm-title { font-size: 1.4rem; }
+      .next-steps { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-label">⚡ Confirmation Screen Preview — PDX Home Energy Score</div>
+
+  <!-- ── THE ACTUAL CONFIRMATION BANNER (exact same HTML as script.js generates) ── -->
+  <div class="confirm-wrap">
+    <div class="acuity-confirm-inner">
+      <div class="acuity-confirm-icon">&#10003;</div>
+      <h2 class="acuity-confirm-title">You're All Set!</h2>
+      <p class="acuity-confirm-body">
+        Your energy score appointment is confirmed.
+        Check your email for details and a calendar invite.
+      </p>
+      <p class="acuity-confirm-contact">
+        Questions? Call <a href="tel:5032906958">(503) 290-6958</a>
+        or email <a href="mailto:pdxhousing@icloud.com">pdxhousing@icloud.com</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── WHAT HAPPENS NEXT (context card — shown below the banner on the page) ── -->
+  <div class="next-steps">
+    <h3>What Happens Next</h3>
+    <ul>
+      <li>
+        <span class="step-dot">1</span>
+        <span><strong>Confirmation email from Acuity</strong> — sent immediately with appointment date, time, address, and a calendar invite (.ics).</span>
+      </li>
+      <li>
+        <span class="step-dot">2</span>
+        <span><strong>Payment receipt from Stripe</strong> — sent to the customer's email if paid online via card. If paying by check, the assessor collects on-site.</span>
+      </li>
+      <li>
+        <span class="step-dot">3</span>
+        <span><strong>Assessor visits</strong> — on the scheduled day. Ensure attic and crawlspace access is clear.</span>
+      </li>
+      <li>
+        <span class="step-dot">4</span>
+        <span><strong>Official report delivered</strong> — within 24 hours of the completed assessment, via email.</span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="preview-note">
+    This screen appears on the website after Acuity sends a booking-confirmed signal.<br>
+    The Acuity iframe hides and this banner scrolls into view in its place.
+  </p>
+
+</body>
+</html>
