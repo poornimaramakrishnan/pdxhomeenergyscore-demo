@@ -138,7 +138,83 @@ function changeSize() {
     }, 50);
 }
 
-// ========== CONTACT FORM ==========
+// ========== ACUITY BOOKING CONFIRMATION ==========
+// Acuity sends a postMessage to the parent window after a booking
+// is completed (and payment processed if Stripe is connected).
+// We listen for it and show a branded confirmation banner
+// on the parent page so the experience feels seamless.
+
+(function () {
+    // Inject the confirmation banner HTML into the DOM (hidden until triggered)
+    function ensureConfirmationBanner() {
+        if (document.getElementById('acuityConfirmBanner')) return;
+        var banner = document.createElement('div');
+        banner.id = 'acuityConfirmBanner';
+        banner.setAttribute('role', 'status');
+        banner.setAttribute('aria-live', 'polite');
+        banner.innerHTML =
+            '<div class="acuity-confirm-inner">' +
+              '<div class="acuity-confirm-icon">&#10003;</div>' +
+              '<h2 class="acuity-confirm-title">You\'re All Set!</h2>' +
+              '<p class="acuity-confirm-body">' +
+                'Your energy score appointment is confirmed. ' +
+                'Check your email for details and a calendar invite.' +
+              '</p>' +
+              '<p class="acuity-confirm-contact">' +
+                'Questions? Call <a href="tel:5032906958">(503) 290-6958</a> ' +
+                'or email <a href="mailto:pdxhousing@icloud.com">pdxhousing@icloud.com</a>' +
+              '</p>' +
+            '</div>';
+        document.body.appendChild(banner);
+    }
+
+    function showConfirmationBanner() {
+        ensureConfirmationBanner();
+        var banner = document.getElementById('acuityConfirmBanner');
+        banner.classList.add('visible');
+        // Scroll banner into view smoothly
+        setTimeout(function () {
+            banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        // Also hide the Acuity embed section
+        var embedSection = document.getElementById('acuityEmbed');
+        if (embedSection) embedSection.style.display = 'none';
+    }
+
+    // Listen for messages from the Acuity iframe
+    window.addEventListener('message', function (e) {
+        // Only accept messages from Acuity's domain
+        if (!e.origin || e.origin.indexOf('acuityscheduling.com') === -1) return;
+
+        var data = e.data;
+
+        // Acuity sends various message types; booking confirmed events include:
+        //   { action: 'confirm' }
+        //   { action: 'appointment-confirmed' }
+        //   plain string: 'confirm' or 'booked'
+        var confirmed = false;
+        if (typeof data === 'object' && data !== null) {
+            var action = (data.action || data.type || data.event || '').toLowerCase();
+            if (action === 'confirm' ||
+                action === 'appointment-confirmed' ||
+                action === 'booked' ||
+                action === 'complete' ||
+                action === 'success') {
+                confirmed = true;
+            }
+        } else if (typeof data === 'string') {
+            var s = data.toLowerCase();
+            if (s === 'confirm' || s === 'booked' || s === 'complete' || s === 'success') {
+                confirmed = true;
+            }
+        }
+
+        if (confirmed) {
+            showConfirmationBanner();
+        }
+    });
+})();
+
 function handleContactSubmit(event) {
     event.preventDefault();
     var form = document.getElementById('contactForm');

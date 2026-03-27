@@ -42,7 +42,7 @@
             "addressRegion": "OR",
             "addressCountry": "US"
         },
-        "areaServed": ["Portland", "Hillsboro", "Milwaukie", "Beaverton", "Lake Oswego", "Tigard"],
+        "areaServed": ["Portland", "Hillsboro", "Milwaukie", "Beaverton"],
         "priceRange": "$159-$189",
         "serviceType": "Home Energy Score Assessment"
     }
@@ -80,18 +80,10 @@
             },
             {
                 "@type": "Question",
-                "name": "Is a home energy score required for selling my home in Portland?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "The City of Portland requires a Home Energy Score for most homes listed for sale. You can check if a score is required at your address on the City of Portland website."
-                }
-            },
-            {
-                "@type": "Question",
                 "name": "What areas does PDX Home Energy Score cover?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We serve the Portland metro area, including Hillsboro, Beaverton, Lake Oswego, Tigard, and Milwaukie."
+                    "text": "We serve the Portland metro area, including Hillsboro, Beaverton, and Milwaukie."
                 }
             }
         ]
@@ -107,12 +99,11 @@
         <div class="container header-inner">
             <a href="#hero" class="logo" aria-label="PDX Home Energy Score - Home">
                 <img src="logo.png" alt="PDX Home Energy Score, LLC" class="logo-img" />
-                <span class="logo-ccb-badge">Oregon CCB License #259388</span>
+                <span class="logo-ccb-badge">Oregon CCB# 259388</span>
             </a>
             <nav class="main-nav" id="mainNav">
                 <a href="#pricing" class="nav-link">Pricing</a>
                 <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#contact" class="nav-link">Contact</a>
                 <a href="tel:5032906958" class="nav-link nav-phone">(503) 290-6958</a>
                 <a href="#schedule" class="btn btn-primary btn-nav">Schedule Now</a>
             </nav>
@@ -132,7 +123,7 @@
             <div class="hero-content">
                 <h1>Home Energy Scores</h1>
                 <p class="hero-subtitle">Fast. Compliant. Done Right.</p>
-                <p class="hero-desc">Licensed. On-Time. Reports delivered quickly – typically within 24 hours.</p>
+                <p class="hero-desc">Licensed. On-Time. Reports typically delivered within 24 hours.</p>
                 <div class="hero-cta">
                     <a href="#schedule" class="btn btn-primary btn-lg">Book Your Energy Score</a>
                     <a href="#pricing" class="btn btn-outline btn-lg">View Pricing</a>
@@ -213,39 +204,10 @@
             </div>
 
             <div class="pricing-notes">
-                <p>Homes over 2,500 sq ft are not currently serviced.</p>
-                <p>Don't see a time that works? <a href="tel:5032906958">Call</a> or email and we'll try to accommodate.</p>
+                <p style="text-align:center;">Homes over 2,500 sq ft are not currently serviced.</p>
+                <p>Don't see a time that works? <a href="tel:5032906958">Call</a> or <a href="#contact">message</a> and we'll try to accommodate.</p>
             </div>
 
-            <div class="addons-section">
-                <h3>Scheduling Add-Ons</h3>
-                <div class="addons-grid">
-                    <div class="addon-item">
-                        <span class="addon-label">Same/Next Day Appointment</span>
-                        <span class="addon-price">+$20–$40</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-label">Evening Appointment</span>
-                        <span class="addon-price">+$20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-label">Saturday Appointment</span>
-                        <span class="addon-price">+$20</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-label">Sunday Appointment</span>
-                        <span class="addon-price">+$40</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-label">Holiday (Memorial Day, Labor Day, July 4th)</span>
-                        <span class="addon-price">+$20–$100</span>
-                    </div>
-                    <div class="addon-item">
-                        <span class="addon-label">Major Holiday (Thanksgiving, Christmas, New Year's)</span>
-                        <span class="addon-price">+$100</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -260,8 +222,7 @@
             <!-- Step 1: Select appointment type (our beautiful UI) -->
             <div class="booking-flow" id="bookingFlow">
                 <div class="booking-step active" id="bookingStep1">
-                    <div class="booking-step-header">
-                        <span class="booking-step-num">1</span>
+                    <div class="booking-step-header booking-step-header-centered">
                         <h3>Select Property Size</h3>
                     </div>
                     <div class="booking-step-body">
@@ -303,7 +264,7 @@
 
             <!-- Alternative: can't book online -->
             <div class="booking-alt-note">
-                <p>Prefer to book by phone? Call <a href="tel:5032906958">(503) 290-6958</a> &bull; Payment by check or cash also accepted at the property.</p>
+                <p>Prefer to book by phone? Call <a href="tel:5032906958">(503) 290-6958</a> &bull; Payment by check or cash also accepted at appointment.</p>
             </div>
         </div>
     </section>
@@ -399,7 +360,7 @@
                             <line x1="6" y1="15" x2="10" y2="15"></line>
                         </svg>
                     </div>
-                    <h3>Leave a Check or Cash</h3>
+                    <h3>Check or Cash</h3>
                     <p>Leave a check or cash at the property for pick-up during the appointment.</p>
                 </div>
             </div>
@@ -443,18 +404,7 @@
                         </span>
                     </summary>
                     <div class="faq-answer">
-                        <p>Less than 24 hours — 99% of the time. We know your timeline matters.</p>
-                    </div>
-                </details>
-                <details class="faq-item">
-                    <summary>
-                        <span class="faq-question">Is this required for selling my home?</span>
-                        <span class="faq-toggle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                        </span>
-                    </summary>
-                    <div class="faq-answer">
-                        <p>It depends on your location. The City of Portland requires a Home Energy Score for most homes listed for sale. <a href="https://www.portland.gov/bps/home-energy-score/check-address" target="_blank" rel="noopener">Check this site to see if a score is required at your address</a>.</p>
+                        <p>Less than 24 hours — 99% of the time.</p>
                     </div>
                 </details>
                 <details class="faq-item">
@@ -465,7 +415,7 @@
                         </span>
                     </summary>
                     <div class="faq-answer">
-                        <p>We serve the Portland metro area, including Hillsboro, Beaverton, Lake Oswego, Tigard, and Milwaukie. Not sure if you're in our service area? Give us a call at <a href="tel:5032906958">(503) 290-6958</a>.</p>
+                        <p>We serve the Portland metro area, including Hillsboro, Beaverton, and Milwaukie. Not sure if you're in our service area? Give us a call at <a href="tel:5032906958">(503) 290-6958</a>.</p>
                     </div>
                 </details>
             </div>
@@ -527,8 +477,9 @@
                     <img src="logo.png" alt="PDX Home Energy Score, LLC" class="footer-logo-img" />
                 </div>
                 <div class="footer-info">
-                    <p>CCB# 259388</p>
+                    <p>Oregon CCB# 259388</p>
                     <p><a href="tel:5032906958">(503) 290-6958</a></p>
+                    <p><a href="#contact">Contact Us</a></p>
                 </div>
                 <div class="footer-bottom">
                     <p>&copy; 2026 PDX Home Energy Score, LLC. All rights reserved.</p>

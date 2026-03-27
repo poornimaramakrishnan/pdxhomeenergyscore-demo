@@ -77,11 +77,11 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     transition: box-shadow 0.3s ease;
 }
 .site-header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
-.header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+.logo { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-decoration: none; flex-shrink: 0; }
 .logo:hover { opacity: 0.88; }
-.logo-img { height: 48px; width: auto; display: block; object-fit: contain; }
-.logo-ccb-badge { font-family: 'Inter', Arial, sans-serif; font-weight: 400; font-size: 0.6rem; color: #999; letter-spacing: 0.02em; line-height: 1; white-space: nowrap; }
+.logo-img { height: 64px; width: auto; display: block; object-fit: contain; }
+.logo-ccb-badge { font-family: 'Inter', Arial, sans-serif; font-weight: 500; font-size: 0.7rem; color: #888; letter-spacing: 0.02em; line-height: 1; white-space: nowrap; padding-left: 2px; }
 .main-nav { display: flex; align-items: center; gap: 8px; }
 .nav-link { padding: 8px 16px; font-size: 0.95rem; font-weight: 500; color: #2D2D2D; border-radius: 6px; transition: all 0.2s ease; }
 .nav-link:hover { color: #1F4E79; background: rgba(31,78,121,0.05); }
@@ -168,6 +168,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 }
 .booking-step.completed .booking-step-summary { display: block; }
 .booking-step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.booking-step-header-centered { justify-content: center; }
 .booking-step-num { width: 32px; height: 32px; border-radius: 50%; background: #1F4E79; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .booking-step-header h3 { font-size: 1.15rem; margin: 0; color: #1F4E79; }
 .size-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -176,7 +177,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .size-option.selected { border-color: #1F4E79; background: #edf2f7; box-shadow: 0 0 0 3px rgba(31,78,121,0.15); }
 .size-label { font-size: 1rem; font-weight: 600; color: #2D2D2D; }
 .size-price { font-size: 1.3rem; font-weight: 800; color: #1F4E79; }
-.booking-note { font-size: 0.82rem; color: #888; display: flex; align-items: center; gap: 6px; }
+.booking-note { font-size: 0.82rem; color: #888; display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; }
 .calendar-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 16px; }
 .demo-calendar { background: #FFFFFF; border: 1px solid #e8ecf0; border-radius: 12px; padding: 20px; }
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
@@ -373,7 +374,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .hero-desc { font-size: 1rem; }
     .pricing-section h2, .how-it-works h2, .schedule-section h2, .payment-section h2, .faq-section h2, .final-cta h2, .contact-section h2 { font-size: 1.8rem; }
     .badges-grid { grid-template-columns: 1fr; gap: 20px; }
-    .main-nav { display: none; position: fixed; top: 72px; left: 0; right: 0; background: #FFFFFF; flex-direction: column; padding: 20px 24px; border-bottom: 1px solid #e8ecf0; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .main-nav { display: none; position: fixed; top: 80px; left: 0; right: 0; background: #FFFFFF; flex-direction: column; padding: 20px 24px; border-bottom: 1px solid #e8ecf0; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
     .main-nav.active { display: flex; }
     .nav-link { width: 100%; text-align: center; padding: 12px 16px; }
     .mobile-toggle { display: flex; }
@@ -390,11 +391,72 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .hero h1 { font-size: 1.8rem; }
     .hero-subtitle { font-size: 1.05rem; }
     .price { font-size: 2.5rem; }
-    .logo-img { height: 36px; }
-    .logo-ccb-badge { display: none; }
+    .logo-img { height: 44px; }
+    .logo-ccb-badge { font-size: 0.6rem; }
     .footer-logo-img { height: 32px; }
 }
 
 /* ---------- ANIMATIONS ---------- */
 .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- ACUITY BOOKING CONFIRMATION BANNER ---------- */
+/* Shown on the parent page after Acuity fires its postMessage confirm event */
+#acuityConfirmBanner {
+    display: none;
+    margin: 40px auto;
+    max-width: 640px;
+    padding: 0 20px;
+}
+#acuityConfirmBanner.visible {
+    display: block;
+}
+.acuity-confirm-inner {
+    background: #ffffff;
+    border: 2px solid #5BA94B;
+    border-radius: 16px;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(31, 78, 121, 0.10);
+}
+.acuity-confirm-icon {
+    width: 60px;
+    height: 60px;
+    background: #5BA94B;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 2rem;
+    line-height: 60px;
+    margin: 0 auto 20px;
+    font-weight: 700;
+}
+.acuity-confirm-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1F4E79;
+    margin: 0 0 12px;
+}
+.acuity-confirm-body {
+    font-size: 1.05rem;
+    color: #2D2D2D;
+    margin: 0 0 16px;
+    line-height: 1.6;
+}
+.acuity-confirm-contact {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+}
+.acuity-confirm-contact a {
+    color: #1F4E79;
+    text-decoration: none;
+    font-weight: 600;
+}
+.acuity-confirm-contact a:hover {
+    text-decoration: underline;
+}
+@media (max-width: 600px) {
+    .acuity-confirm-inner { padding: 28px 20px; }
+    .acuity-confirm-title { font-size: 1.4rem; }
+}
