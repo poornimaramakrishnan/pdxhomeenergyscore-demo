@@ -91,11 +91,10 @@ function selectAcuityType(size) {
         step1.classList.add('completed');
     }
 
-    // Build the Acuity iframe URL using appointmentTypeIds[] (array notation).
-    // This locks the embed to ONLY the selected service type and hides
-    // Acuity's own service-type dropdown entirely — no extra choices shown.
+    // Use ?appointmentType=ID (singular, no brackets) — this skips the service
+    // selector entirely and drops straight into the calendar for that one type.
     var typeId = (size === 'small') ? ACUITY_TYPE_SMALL : ACUITY_TYPE_LARGE;
-    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&appointmentTypeIds[]=' + typeId + '&notHeader=1';
+    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&appointmentType=' + typeId + '&notHeader=1';
 
     // Update the description text
     var descEl = document.getElementById('acuitySelectedType');
