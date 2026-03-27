@@ -315,6 +315,77 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .booking-alt-note { max-width: 900px; margin: 24px auto 0; text-align: center; font-size: 0.9rem; color: #888; }
 .booking-alt-note a { color: #1F4E79; font-weight: 600; }
 
+/* ---------- PRICING CALENDAR ---------- */
+.pricing-calendar { max-width: 560px; margin: 0 auto; }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 0 4px; }
+.cal-month-label { font-size: 1.15rem; font-weight: 700; color: #1F4E79; }
+.cal-nav { background: none; border: 2px solid #e8ecf0; border-radius: 8px; width: 36px; height: 36px; font-size: 1.3rem; color: #1F4E79; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+.cal-nav:hover { background: #1F4E79; color: #FFFFFF; border-color: #1F4E79; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day-header { text-align: center; font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; padding: 6px 0; }
+.cal-cell { position: relative; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; font-size: 0.85rem; transition: all 0.2s ease; }
+.cal-empty { background: transparent; }
+.cal-past { background: #f5f5f5; color: #ccc; cursor: default; }
+.cal-past .cal-day-num { color: #ccc; }
+.cal-available { cursor: pointer; border: 1.5px solid transparent; }
+.cal-available:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(31,78,121,0.12); }
+.cal-selected { border-color: #1F4E79 !important; box-shadow: 0 0 0 3px rgba(31,78,121,0.18) !important; transform: translateY(-2px); }
+.cal-day-num { font-weight: 700; color: #2D2D2D; line-height: 1; }
+.cal-day-price { font-size: 0.68rem; font-weight: 600; margin-top: 2px; opacity: 0.85; }
+.cal-day-holiday { position: absolute; top: 3px; right: 5px; font-size: 0.55rem; color: #e53e3e; }
+
+/* Tier colors for calendar cells */
+.tier-best { background: #e8f5e9; }
+.tier-best .cal-day-price { color: #388e3c; }
+.tier-mid { background: #fff8e1; }
+.tier-mid .cal-day-price { color: #f57c00; }
+.tier-high { background: #fff3e0; }
+.tier-high .cal-day-price { color: #e65100; }
+.tier-premium { background: #fce4ec; }
+.tier-premium .cal-day-price { color: #c62828; }
+
+/* Calendar legend */
+.cal-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e8ecf0; }
+.cal-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #555; font-weight: 500; }
+.cal-legend-dot { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+.cal-legend-dot.tier-best { background: #e8f5e9; border: 1px solid #a5d6a7; }
+.cal-legend-dot.tier-mid { background: #fff8e1; border: 1px solid #ffe082; }
+.cal-legend-dot.tier-high { background: #fff3e0; border: 1px solid #ffcc80; }
+.cal-legend-dot.tier-premium { background: #fce4ec; border: 1px solid #f48fb1; }
+
+/* ---------- TIME SLOTS ---------- */
+.time-slot-date { text-align: center; font-size: 1rem; font-weight: 600; color: #1F4E79; margin: 0 0 16px; }
+.time-slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 8px; max-width: 700px; margin: 0 auto; }
+.time-slot { display: flex; flex-direction: column; align-items: center; padding: 12px 8px; border-radius: 10px; border: 1.5px solid #e8ecf0; cursor: pointer; background: #FFFFFF; transition: all 0.2s ease; }
+.time-slot:hover { border-color: #1F4E79; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(31,78,121,0.1); }
+.time-slot-selected { border-color: #1F4E79 !important; background: #f0f7ff !important; box-shadow: 0 0 0 3px rgba(31,78,121,0.15); }
+.time-slot-time { font-size: 0.92rem; font-weight: 700; color: #2D2D2D; }
+.time-slot-price { font-size: 0.85rem; font-weight: 700; color: #1F4E79; margin-top: 2px; }
+.time-slot-tier { font-size: 0.68rem; color: #888; margin-top: 1px; }
+.time-slot-none { text-align: center; color: #888; font-size: 0.95rem; padding: 24px; }
+
+/* Time slot tier colors */
+.time-slot.tier-best { background: #f0fbf0; border-color: #c8e6c9; }
+.time-slot.tier-best .time-slot-price { color: #388e3c; }
+.time-slot.tier-mid { background: #fffbf0; border-color: #ffe082; }
+.time-slot.tier-mid .time-slot-price { color: #f57c00; }
+.time-slot.tier-high { background: #fff8f0; border-color: #ffcc80; }
+.time-slot.tier-high .time-slot-price { color: #e65100; }
+.time-slot.tier-premium { background: #fff0f3; border-color: #f48fb1; }
+.time-slot.tier-premium .time-slot-price { color: #c62828; }
+
+/* ---------- PRICING SUMMARY BOX ---------- */
+.pricing-summary-box { max-width: 700px; margin: 36px auto 0; background: #F7F8FA; border-radius: 14px; padding: 28px 24px; border: 1px solid #e8ecf0; }
+.pricing-summary-box h4 { text-align: center; font-size: 1.1rem; color: #1F4E79; margin: 0 0 16px; }
+.pricing-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pricing-summary-item { padding: 12px 16px; border-radius: 10px; display: flex; flex-direction: column; gap: 3px; }
+.pricing-summary-item strong { font-size: 0.85rem; color: #2D2D2D; }
+.pricing-summary-item span { font-size: 0.78rem; color: #555; }
+.tier-best-bg { background: #e8f5e9; border: 1px solid #c8e6c9; }
+.tier-mid-bg { background: #fff8e1; border: 1px solid #ffe082; }
+.tier-high-bg { background: #fff3e0; border: 1px solid #ffcc80; }
+.tier-premium-bg { background: #fce4ec; border: 1px solid #f48fb1; }
+
 /* ---------- ADD-ONS PRICING ---------- */
 .addons-section { max-width: 700px; margin: 40px auto 0; text-align: center; }
 .addons-section h3 { font-size: 1.3rem; color: #1F4E79; margin-bottom: 20px; }
@@ -365,6 +436,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .calendar-wrapper { grid-template-columns: 1fr; }
     .size-options { grid-template-columns: 1fr; }
     .addons-grid { grid-template-columns: 1fr; }
+    .pricing-summary-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -394,6 +466,17 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .logo-img { height: 44px; }
     .logo-ccb-badge { font-size: 0.6rem; }
     .footer-logo-img { height: 32px; }
+    .cal-cell { border-radius: 6px; }
+    .cal-day-num { font-size: 0.75rem; }
+    .cal-day-price { font-size: 0.58rem; }
+    .cal-legend { gap: 8px; }
+    .cal-legend-item { font-size: 0.68rem; }
+    .time-slot-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+    .time-slot { padding: 10px 6px; }
+    .time-slot-time { font-size: 0.82rem; }
+    .time-slot-price { font-size: 0.78rem; }
+    .pricing-summary-box { padding: 20px 16px; }
+    .pricing-summary-item { padding: 10px 12px; }
 }
 
 /* ---------- ANIMATIONS ---------- */

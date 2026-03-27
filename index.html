@@ -174,7 +174,7 @@
     <section class="pricing-section" id="pricing">
         <div class="container">
             <h2>Clear Pricing. Flat Rate. No Surprises.</h2>
-            <p class="pricing-subtitle">Weekday daytime appointments booked at least 48 hours in advance receive our lowest rates. Other times are priced higher.</p>
+            <p class="pricing-subtitle">Weekday daytime appointments booked at least 48 hours in advance receive our lowest rates. Evenings, weekends, and short-notice bookings are priced higher — you'll always see the exact price before you book.</p>
 
             <div class="pricing-grid pricing-grid-2col">
                 <div class="price-card price-card-featured">
@@ -212,26 +212,27 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- SECTION 4: SCHEDULING (Full-Width Booking Flow) -->
+    <!-- SECTION 4: SCHEDULING (Dynamic Pricing + Calendar) -->
     <!-- ============================================ -->
     <section class="schedule-section" id="schedule">
         <div class="container container-wide">
             <h2>Schedule Your Appointment Now</h2>
-            <p class="section-subtitle">Select your home size, then pick a date and time. Payment is collected securely at booking via Stripe.</p>
+            <p class="section-subtitle">Choose your home size, pick a date and time, then complete your booking. Prices update dynamically — save by booking weekday daytime slots at least 48 hours ahead.</p>
 
-            <!-- Step 1: Select appointment type (our beautiful UI) -->
             <div class="booking-flow" id="bookingFlow">
+
+                <!-- STEP 1: Select Property Size -->
                 <div class="booking-step active" id="bookingStep1">
                     <div class="booking-step-header booking-step-header-centered">
                         <h3>Select Property Size</h3>
                     </div>
                     <div class="booking-step-body">
                         <div class="size-options">
-                            <button class="size-option" onclick="selectAcuityType('small')">
+                            <button class="size-option" onclick="selectSize('small')">
                                 <span class="size-label">Up to 2,250 sq ft</span>
                                 <span class="size-price">From $159</span>
                             </button>
-                            <button class="size-option" onclick="selectAcuityType('large')">
+                            <button class="size-option" onclick="selectSize('large')">
                                 <span class="size-label">2,251 – 2,500 sq ft</span>
                                 <span class="size-price">From $189</span>
                             </button>
@@ -239,25 +240,75 @@
                         <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Step 2: Acuity handles date/time, intake form, and payment -->
+                <!-- STEP 2: Pick a Date (Custom Calendar) -->
+                <div class="booking-step" id="bookingStep2" style="display:none;">
+                    <div class="booking-step-header">
+                        <h3>Pick a Date</h3>
+                        <button class="btn btn-outline btn-sm" onclick="changeSize()">← Change Size</button>
+                    </div>
+                    <div class="booking-step-body">
+                        <div class="pricing-calendar" id="pricingCalendar">
+                            <!-- Calendar rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Pick a Time (Slots with live pricing) -->
+                <div class="booking-step" id="bookingStep3" style="display:none;">
+                    <div class="booking-step-header">
+                        <h3>Pick a Time</h3>
+                        <button class="btn btn-outline btn-sm" onclick="changeDate()">← Change Date</button>
+                    </div>
+                    <div class="booking-step-body">
+                        <div id="timeSlots">
+                            <!-- Time slots rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end booking-flow -->
+
+            <!-- STEP 4: Acuity Embed (payment + intake form) -->
             <div class="acuity-embed-section" id="acuityEmbed" style="display:none;">
                 <div class="acuity-embed-header">
                     <div class="acuity-step-badge">
                         <div>
-                            <h3 class="acuity-embed-title">Choose Date, Time &amp; Complete Booking</h3>
-                            <p class="acuity-embed-desc" id="acuitySelectedType">Pick an available slot, fill in your details, and pay securely — all in one step.</p>
+                            <h3 class="acuity-embed-title">Complete Your Booking</h3>
+                            <p class="acuity-embed-desc" id="acuitySelectedType">Fill in your details and pay securely below.</p>
                         </div>
                     </div>
-                    <button class="btn btn-outline btn-sm" onclick="changeSize()">← Change Size</button>
+                    <button class="btn btn-outline btn-sm" onclick="changeTime()">← Change Time</button>
                 </div>
                 <div class="acuity-iframe-wrapper" id="acuityIframeWrapper">
-                    <!-- iframe injected dynamically with correct appointmentType param -->
+                    <!-- iframe injected dynamically -->
                 </div>
                 <div class="acuity-footer-note">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span>Secure payment via Stripe &bull; Confirmation email sent instantly &bull; Free cancellation with 24hr notice</span>
+                </div>
+            </div>
+
+            <!-- Pricing Summary Box -->
+            <div class="pricing-summary-box fade-in">
+                <h4>How Pricing Works</h4>
+                <div class="pricing-summary-grid">
+                    <div class="pricing-summary-item tier-best-bg">
+                        <strong>Best Rate</strong>
+                        <span>Weekday 9 AM – 3 PM, booked 48+ hours ahead</span>
+                    </div>
+                    <div class="pricing-summary-item tier-mid-bg">
+                        <strong>Off-Hours / Saturday</strong>
+                        <span>+$20 — before 9 AM, after 3 PM, or Saturdays</span>
+                    </div>
+                    <div class="pricing-summary-item tier-high-bg">
+                        <strong>Sunday / Short Notice</strong>
+                        <span>+$20 – $40 — Sundays or booked 24–48 hrs ahead</span>
+                    </div>
+                    <div class="pricing-summary-item tier-premium-bg">
+                        <strong>Same Day / Holiday</strong>
+                        <span>+$40 – $100 — under 24 hrs notice or holidays</span>
+                    </div>
                 </div>
             </div>
 
