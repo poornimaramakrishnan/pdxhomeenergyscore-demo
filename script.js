@@ -24,22 +24,22 @@ var ACUITY_BASE  = 'https://app.acuityscheduling.com/schedule.php';
 
 var ACUITY_TYPES = {
     // ── Small (up to 2,250 sq ft) ──
-    'small|base':        { id: '86793971', price: 159 },
-    'small|offhours':    { id: 'SMALL_OFFHOURS',    price: 179 },
-    'small|saturday':    { id: 'SMALL_SATURDAY',     price: 179 },
-    'small|sunday':      { id: 'SMALL_SUNDAY',       price: 199 },
-    'small|short24to48': { id: 'SMALL_SHORT2448',    price: 179 },
-    'small|sameday':     { id: 'SMALL_SAMEDAY',      price: 199 },
-    'small|holiday':     { id: 'SMALL_HOLIDAY',      price: 259 },
+    'small|base':        { id: '91186136', price: 159 }, // Standard Weekday ≤2,250
+    'small|offhours':    { id: '91186204', price: 179 }, // Off-Hours Weekday ≤2,250
+    'small|saturday':    { id: '91186244', price: 179 }, // Saturday ≤2,250
+    'small|sunday':      { id: '91186284', price: 199 }, // Sunday ≤2,250
+    'small|short24to48': { id: '91186335', price: 179 }, // Short Notice (24-48hr) ≤2,250
+    'small|sameday':     { id: '91186606', price: 199 }, // Same Day (<24hr) ≤2,250
+    'small|holiday':     { id: 'SMALL_HOLIDAY', price: 259 }, // Did not specify holiday, keeping prev
 
     // ── Large (2,251 – 2,500 sq ft) ──
-    'large|base':        { id: '86794016', price: 189 },
-    'large|offhours':    { id: 'LARGE_OFFHOURS',    price: 209 },
-    'large|saturday':    { id: 'LARGE_SATURDAY',     price: 209 },
-    'large|sunday':      { id: 'LARGE_SUNDAY',       price: 229 },
-    'large|short24to48': { id: 'LARGE_SHORT2448',    price: 209 },
-    'large|sameday':     { id: 'LARGE_SAMEDAY',      price: 229 },
-    'large|holiday':     { id: 'LARGE_HOLIDAY',      price: 289 }
+    'large|base':        { id: '91186164', price: 189 }, // Standard Weekday 2,251–2,500
+    'large|offhours':    { id: '91186221', price: 209 }, // Off-Hours Weekday 2,251–2,500
+    'large|saturday':    { id: '91186269', price: 209 }, // Saturday 2,251–2,500
+    'large|sunday':      { id: '91186305', price: 229 }, // Sunday 2,251–2,500
+    'large|short24to48': { id: '91186367', price: 209 }, // Short Notice (24-48hr) 2,251–2,500
+    'large|sameday':     { id: '91191641', price: 229 }, // Same Day (<24hr) 2,251–2,500
+    'large|holiday':     { id: 'LARGE_HOLIDAY', price: 289 }
 };
 
 // Holidays (month/day) — price is always the holiday tier
