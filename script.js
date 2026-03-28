@@ -30,7 +30,9 @@ var ACUITY_TYPES = {
     'small|sunday':      { id: '91186284', price: 199 }, // Sunday ≤2,250
     'small|short24to48': { id: '91186335', price: 179 }, // Short Notice (24-48hr) ≤2,250
     'small|sameday':     { id: '91186606', price: 199 }, // Same Day (<24hr) ≤2,250
-    'small|holiday':     { id: 'SMALL_HOLIDAY', price: 259 }, // Did not specify holiday, keeping prev
+    'small|holiday_base':        { id: '91191874', price: 219 },
+    'small|holiday_short24to48': { id: '91193034', price: 239 },
+    'small|holiday_sameday':     { id: '91192042', price: 259 },
 
     // ── Large (2,251 – 2,500 sq ft) ──
     'large|base':        { id: '91186164', price: 189 }, // Standard Weekday 2,251–2,500
@@ -39,7 +41,9 @@ var ACUITY_TYPES = {
     'large|sunday':      { id: '91186305', price: 229 }, // Sunday 2,251–2,500
     'large|short24to48': { id: '91186367', price: 209 }, // Short Notice (24-48hr) 2,251–2,500
     'large|sameday':     { id: '91191641', price: 229 }, // Same Day (<24hr) 2,251–2,500
-    'large|holiday':     { id: 'LARGE_HOLIDAY', price: 289 }
+    'large|holiday_base':        { id: '91193082', price: 239 },
+    'large|holiday_short24to48': { id: '91193127', price: 269 },
+    'large|holiday_sameday':     { id: '91193105', price: 289 }
 };
 
 // Holidays (month/day) — price is always the holiday tier
@@ -99,9 +103,14 @@ function getDayTier(date) {
 
 function getSlotTier(date, timeStr) {
     // Full tier calculation for a specific date+time
-    if (isHoliday(date)) return 'holiday';
-
     var leadHours = getLeadTimeHours(date, timeStr);
+    
+    if (isHoliday(date)) {
+        if (leadHours < 24) return 'holiday_sameday';
+        if (leadHours < 48) return 'holiday_short24to48';
+        return 'holiday_base';
+    }
+
     if (leadHours < 24) return 'sameday';
     if (leadHours < 48) return 'short24to48';
 
@@ -110,7 +119,8 @@ function getSlotTier(date, timeStr) {
     if (dow === 6) return 'saturday';
 
     var hour = parseInt(timeStr.split(':')[0], 10);
-    if (hour < PEAK_START || hour >= PEAK_END) return 'offhours';
+    if (hour < PEAK_START) return 'offhours';
+    if (hour >= PEAK_END) return 'offhours';
 
     return 'base';
 }
@@ -118,11 +128,15 @@ function getSlotTier(date, timeStr) {
 function getDayMinPrice(date, size) {
     // Cheapest possible price for a given day (used for calendar labels)
     var dayTier = getDayTier(date);
-    if (dayTier === 'holiday')  return ACUITY_TYPES[size + '|holiday'].price;
+    var leadToMidDay = getLeadTimeHours(date, '12:00');
+    if (dayTier === 'holiday') {
+        if (leadToMidDay < 24) return ACUITY_TYPES[size + '|holiday_sameday'].price;
+        if (leadToMidDay < 48) return ACUITY_TYPES[size + '|holiday_short24to48'].price;
+        return ACUITY_TYPES[size + '|holiday_base'].price;
+    }
     if (dayTier === 'sunday')   return ACUITY_TYPES[size + '|sunday'].price;
     if (dayTier === 'saturday') return ACUITY_TYPES[size + '|saturday'].price;
     // Weekday: check lead time
-    var leadToMidDay = getLeadTimeHours(date, '12:00');
     if (leadToMidDay < 24) return ACUITY_TYPES[size + '|sameday'].price;
     if (leadToMidDay < 48) return ACUITY_TYPES[size + '|short24to48'].price;
     return ACUITY_TYPES[size + '|base'].price;
@@ -146,16 +160,21 @@ function getTierLabel(tier) {
         'sunday': 'Sunday',
         'short24to48': 'Short Notice',
         'sameday': 'Same Day',
-        'holiday': 'Holiday'
+        'holiday_base': 'Holiday',
+        'holiday_short24to48': 'Holiday Short Notice',
+        'holiday_sameday': 'Holiday Same Day'
     };
     return labels[tier] || tier;
 }
 
 function getTierClass(tier) {
     if (tier === 'base') return 'tier-best';
-    if (tier === 'offhours' || tier === 'saturday') return 'tier-mid';
-    if (tier === 'sunday' || tier === 'short24to48') return 'tier-high';
-    if (tier === 'sameday' || tier === 'holiday') return 'tier-premium';
+    if (tier === 'offhours') return 'tier-mid';
+    if (tier === 'saturday') return 'tier-mid';
+    if (tier === 'sunday') return 'tier-high';
+    if (tier === 'short24to48') return 'tier-high';
+    if (tier === 'sameday') return 'tier-premium';
+    if (tier.indexOf('holiday') === 0) return 'tier-premium';
     return '';
 }
 
