@@ -129,6 +129,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .schedule-section { padding: 80px 0; background: #F7F8FA; }
 .schedule-section h2 { text-align: center; font-size: 2.2rem; margin-bottom: 12px; }
 .section-subtitle { text-align: center; font-size: 1rem; color: #666; margin-bottom: 40px; }
+.booking-lead-in { text-align: center; font-size: 0.9rem; color: #666; margin-top: -28px; margin-bottom: 36px; }
 .booking-flow { max-width: 900px; margin: 0 auto 32px; background: #FFFFFF; border-radius: 16px; border: 1px solid #e8ecf0; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
 .booking-step { padding: 32px 36px; border-bottom: 1px solid #e8ecf0; display: none; }
 .booking-step:last-child { border-bottom: none; }
