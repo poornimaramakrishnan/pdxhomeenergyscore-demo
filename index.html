@@ -161,10 +161,10 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                     </div>
-                    <p>Fast turnaround (typically within 24 hours)</p>
+                    <p style="white-space:nowrap;">Fast turnaround (typically within 24 hours)</p>
                 </div>
             </div>
-            <p class="trust-serving">Serving the Portland Metro Area</p>
+            <p class="trust-serving">Serving the greater Portland &amp; Salem metro areas</p>
         </div>
     </section>
 
@@ -173,26 +173,13 @@
     <!-- ============================================ -->
     <section class="pricing-section" id="pricing">
         <div class="container">
-            <h2>Clear Pricing. Flat Rate. No Surprises.</h2>
-            <p class="pricing-subtitle">Weekday daytime appointments booked at least 48 hours in advance receive our lowest rates. Evenings, weekends, and short-notice bookings are priced higher — you'll always see the exact price before you book.</p>
+            <h2>Simple Pricing. No Surprises.</h2>
+            <p class="pricing-subtitle">Pricing varies by day, time, and advanced notice – weekday daytime appointments booked 48+ hours in advance offer the lowest rates.</p>
 
-            <div class="pricing-grid pricing-grid-2col">
+            <div class="pricing-grid pricing-grid-1col">
                 <div class="price-card price-card-featured">
-                    <div class="price-label">Most Common</div>
                     <h3>Up to 2,250 sq ft</h3>
-                    <div class="price">$159<span class="price-plus">+</span></div>
-                    <ul class="price-features">
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            On-site energy assessment &amp; official report
-                        </li>
-                    </ul>
-                    <a href="#schedule" class="btn btn-primary">Book Now</a>
-                </div>
-
-                <div class="price-card">
-                    <h3>2,251 – 2,500 sq ft</h3>
-                    <div class="price">$189<span class="price-plus">+</span></div>
+                    <div class="price">Starting at $159</div>
                     <ul class="price-features">
                         <li>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -205,7 +192,7 @@
 
             <div class="pricing-notes">
                 <p style="text-align:center;">Homes over 2,500 sq ft are not currently serviced.</p>
-                <p>Don't see a time that works? <a href="tel:5032906958">Call</a> or <a href="#contact">message</a> and we'll try to accommodate.</p>
+                <p style="text-align:center;">Additional options beyond what's shown may be available.<br><a href="tel:5032906958">Call</a> or <a href="#contact">message</a> and we'll try to accommodate.</p>
             </div>
 
         </div>
@@ -216,36 +203,16 @@
     <!-- ============================================ -->
     <section class="schedule-section" id="schedule">
         <div class="container container-wide">
-            <h2>Schedule Your Appointment Now</h2>
-            <p class="section-subtitle">Choose your home size, pick a date and time, then complete your booking. Prices update dynamically — save by booking weekday daytime slots at least 48 hours ahead.</p>
+            <h2>Schedule Your Appointment</h2>
+            <p class="section-subtitle">Select a date and time below to schedule your appointment. Weekday daytime appointments booked 48+ hours in advance offer the lowest rates.</p>
+            <p class="booking-lead-in">Additional options beyond what's shown may be available. <a href="tel:5032906958">Call</a> or <a href="#contact">message</a> and we'll try to accommodate.</p>
 
             <div class="booking-flow" id="bookingFlow">
 
-                <!-- STEP 1: Select Property Size -->
-                <div class="booking-step active" id="bookingStep1">
+                <!-- STEP 1: Pick a Date (Custom Calendar) -->
+                <div class="booking-step active" id="bookingStep2">
                     <div class="booking-step-header booking-step-header-centered">
-                        <h3>Select Property Size</h3>
-                    </div>
-                    <div class="booking-step-body">
-                        <div class="size-options">
-                            <button class="size-option" onclick="selectSize('small')">
-                                <span class="size-label">Up to 2,250 sq ft</span>
-                                <span class="size-price">From $159</span>
-                            </button>
-                            <button class="size-option" onclick="selectSize('large')">
-                                <span class="size-label">2,251 – 2,500 sq ft</span>
-                                <span class="size-price">From $189</span>
-                            </button>
-                        </div>
-                        <p class="booking-note">Homes over 2,500 sq ft are not currently serviced.</p>
-                    </div>
-                </div>
-
-                <!-- STEP 2: Pick a Date (Custom Calendar) -->
-                <div class="booking-step" id="bookingStep2" style="display:none;">
-                    <div class="booking-step-header">
                         <h3>Pick a Date</h3>
-                        <button class="btn btn-outline btn-sm" onclick="changeSize()">← Change Size</button>
                     </div>
                     <div class="booking-step-body">
                         <div class="pricing-calendar" id="pricingCalendar">
@@ -254,11 +221,11 @@
                     </div>
                 </div>
 
-                <!-- STEP 3: Pick a Time (Slots with live pricing) -->
+                <!-- STEP 2: Pick a Time (Slots with live pricing) -->
                 <div class="booking-step" id="bookingStep3" style="display:none;">
                     <div class="booking-step-header">
                         <h3>Pick a Time</h3>
-                        <button class="btn btn-outline btn-sm" onclick="changeDate()">← Change Date</button>
+                        <button class="btn btn-outline btn-sm" onclick="changeDate()">&#8592; Change Date</button>
                     </div>
                     <div class="booking-step-body">
                         <div id="timeSlots">
@@ -298,16 +265,16 @@
                         <span>Weekday 9 AM – 3 PM, booked 48+ hours ahead</span>
                     </div>
                     <div class="pricing-summary-item tier-mid-bg">
-                        <strong>Off-Hours / Saturday</strong>
-                        <span>+$20 — before 9 AM, after 3 PM, or Saturdays</span>
+                        <strong>After Hours / Weekend</strong>
+                        <span>Evenings, early mornings, Saturdays &amp; Sundays</span>
                     </div>
                     <div class="pricing-summary-item tier-high-bg">
-                        <strong>Sunday / Short Notice</strong>
-                        <span>+$20 – $40 — Sundays or booked 24–48 hrs ahead</span>
+                        <strong>Priority Notice (25–48 hrs)</strong>
+                        <span>+$30 surcharge on base booking price</span>
                     </div>
                     <div class="pricing-summary-item tier-premium-bg">
-                        <strong>Same Day / Holiday</strong>
-                        <span>+$40 – $100 — under 24 hrs notice or holidays</span>
+                        <strong>Short Notice (&lt;24 hrs) / Holiday</strong>
+                        <span>+$60 surcharge on base booking price</span>
                     </div>
                 </div>
             </div>

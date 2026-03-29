@@ -8,42 +8,53 @@ var ACUITY_OWNER = '37810233';
 var ACUITY_BASE  = 'https://app.acuityscheduling.com/schedule.php';
 
 // ========== PRICING RULES ==========
-// Each Acuity appointment type has a fixed price.
-// We create types for every tier and map dynamically.
+// New simplified pricing model — single size category (up to 2,250 sq ft).
+// Base prices vary by day type and time-of-day category.
+// Surcharges are additive based on lead time.
 //
-// KEY:  "size|tier"  →  { id: AcuityTypeID, price: dollarAmount }
+// PRICING MATRIX (48+ hours notice):
+//   Weekday Normal (9am-3pm):        $159
+//   Weekday After Hours (3:30pm-7pm): $179
+//   Weekend Normal (9am-3pm):         $199
+//   Weekend After Hours (3:30pm-7pm): $209
 //
-// TIERS:
-//   base        = weekday 9am-3pm, booked ≥48hr ahead
-//   offhours    = weekday before 9am or after 3pm, booked ≥48hr ahead
-//   saturday    = Saturday, booked ≥48hr ahead
-//   sunday      = Sunday, booked ≥48hr ahead
-//   short24to48 = booked 24-48hr ahead (any time)
-//   sameday     = booked <24hr ahead (any time)
-//   holiday     = holidays (any time)
+// SURCHARGES (added to base):
+//   Priority Notice (25-48 hours): +$30
+//   Short Notice (within 24 hours): +$60
+//
+// FIXED TIME SLOTS:
+//   Normal:      9:00 AM, 12:15 PM, 3:00 PM
+//   After Hours: 4:30 PM, 6:30 PM
 
+// Acuity appointment type IDs — one per unique price point
 var ACUITY_TYPES = {
-    // ── Small (up to 2,250 sq ft) ──
-    'small|base':        { id: '91186136', price: 159 }, // Standard Weekday ≤2,250
-    'small|offhours':    { id: '91186204', price: 179 }, // Off-Hours Weekday ≤2,250
-    'small|saturday':    { id: '91186244', price: 179 }, // Saturday ≤2,250
-    'small|sunday':      { id: '91186284', price: 199 }, // Sunday ≤2,250
-    'small|short24to48': { id: '91186335', price: 179 }, // Short Notice (24-48hr) ≤2,250
-    'small|sameday':     { id: '91186606', price: 199 }, // Same Day (<24hr) ≤2,250
-    'small|holiday_base':        { id: '91191874', price: 219 },
-    'small|holiday_short24to48': { id: '91193034', price: 239 },
-    'small|holiday_sameday':     { id: '91192042', price: 259 },
+    // ── Weekday Normal (9am-3pm) ──
+    'wd_normal':              { id: '91186136', price: 159 },
+    'wd_normal_priority':     { id: '91186335', price: 189 },   // 159 + 30
+    'wd_normal_short':        { id: '91186606', price: 219 },   // 159 + 60
 
-    // ── Large (2,251 – 2,500 sq ft) ──
-    'large|base':        { id: '91186164', price: 189 }, // Standard Weekday 2,251–2,500
-    'large|offhours':    { id: '91186221', price: 209 }, // Off-Hours Weekday 2,251–2,500
-    'large|saturday':    { id: '91186269', price: 209 }, // Saturday 2,251–2,500
-    'large|sunday':      { id: '91186305', price: 229 }, // Sunday 2,251–2,500
-    'large|short24to48': { id: '91186367', price: 209 }, // Short Notice (24-48hr) 2,251–2,500
-    'large|sameday':     { id: '91191641', price: 229 }, // Same Day (<24hr) 2,251–2,500
-    'large|holiday_base':        { id: '91193082', price: 239 },
-    'large|holiday_short24to48': { id: '91193127', price: 269 },
-    'large|holiday_sameday':     { id: '91193105', price: 289 }
+    // ── Weekday After Hours (3:30pm-7pm) ──
+    'wd_afterhours':          { id: '91186204', price: 179 },
+    'wd_afterhours_priority': { id: '91186335', price: 209 },   // 179 + 30
+    'wd_afterhours_short':    { id: '91186606', price: 239 },   // 179 + 60
+
+    // ── Weekend Normal (9am-3pm) ──
+    'we_normal':              { id: '91186244', price: 199 },
+    'we_normal_priority':     { id: '91186367', price: 229 },   // 199 + 30
+    'we_normal_short':        { id: '91191641', price: 259 },   // 199 + 60
+
+    // ── Weekend After Hours (3:30pm-7pm) ──
+    'we_afterhours':          { id: '91186269', price: 209 },
+    'we_afterhours_priority': { id: '91186367', price: 239 },   // 209 + 30
+    'we_afterhours_short':    { id: '91191641', price: 269 },   // 209 + 60
+
+    // ── Holiday ──
+    'holiday_normal':         { id: '91191874', price: 219 },
+    'holiday_normal_priority': { id: '91193034', price: 249 },  // 219 + 30
+    'holiday_normal_short':   { id: '91192042', price: 279 },   // 219 + 60
+    'holiday_afterhours':     { id: '91193082', price: 239 },
+    'holiday_afterhours_priority': { id: '91193127', price: 269 }, // 239 + 30
+    'holiday_afterhours_short': { id: '91193105', price: 299 }  // 239 + 60
 };
 
 // Holidays (month/day) — price is always the holiday tier
@@ -58,19 +69,18 @@ var HOLIDAYS = [
     { m: 1,  d: 1,  name: "New Year's Day" }
 ];
 
-// Business hours: 8:00 AM – 6:00 PM, 30-min slots
-var SLOT_START = 8;   // 8:00 AM
-var SLOT_END   = 18;  // last slot starts at 5:30 PM
-var SLOT_STEP  = 30;  // minutes
+// Fixed time slots (no more 30-min intervals)
+var NORMAL_SLOTS     = ['09:00', '12:15', '15:00'];       // 9 AM, 12:15 PM, 3 PM
+var AFTERHOURS_SLOTS = ['16:30', '18:30'];                 // 4:30 PM, 6:30 PM
+var ALL_SLOTS        = NORMAL_SLOTS.concat(AFTERHOURS_SLOTS);
 
-// Peak hours (base pricing): 9:00 AM – 2:59 PM
-var PEAK_START = 9;   // 9:00 AM
-var PEAK_END   = 15;  // 3:00 PM (exclusive — 3:00 PM+ is off-hours)
+// Peak hours boundary: Normal = 9am–3pm, After Hours = 3:30pm–7pm
+var PEAK_END_HOUR = 15;  // slots at 15:00 (3 PM) and before are "normal"
 
 // ========== STATE ==========
-var selectedSize = null;     // 'small' or 'large'
+var selectedSize = 'small';  // single size category — always 'small'
 var selectedDate = null;     // Date object
-var selectedTime = null;     // '09:00', '09:30', etc.
+var selectedTime = null;     // '09:00', '12:15', etc.
 var calendarMonth = null;    // Date object (1st of displayed month)
 
 // ========== HELPERS ==========
@@ -93,88 +103,108 @@ function getLeadTimeHours(date, timeStr) {
 }
 
 function getDayTier(date) {
-    // Returns the tier for a whole day (used for calendar pricing display)
+    // Returns the broad tier for a whole day (used for calendar pricing display)
     if (isHoliday(date)) return 'holiday';
     var dow = date.getDay(); // 0=Sun, 6=Sat
-    if (dow === 0) return 'sunday';
-    if (dow === 6) return 'saturday';
-    return 'base'; // weekday — off-hours distinction is at time level
+    if (dow === 0 || dow === 6) return 'weekend';
+    return 'weekday';
+}
+
+function isAfterHoursSlot(timeStr) {
+    var hour = parseInt(timeStr.split(':')[0], 10);
+    return hour >= 16; // 4:30 PM and 6:30 PM are after hours
+}
+
+function getSlotTierKey(date, timeStr) {
+    // Returns the ACUITY_TYPES key for a given date+time
+    var leadHours = getLeadTimeHours(date, timeStr);
+    var isHol = isHoliday(date);
+    var dow = date.getDay();
+    var isWeekend = (dow === 0 || dow === 6);
+    var isAfter = isAfterHoursSlot(timeStr);
+
+    // Determine day+time base
+    var base = '';
+    if (isHol) {
+        base = isAfter ? 'holiday_afterhours' : 'holiday_normal';
+    } else if (isWeekend) {
+        base = isAfter ? 'we_afterhours' : 'we_normal';
+    } else {
+        base = isAfter ? 'wd_afterhours' : 'wd_normal';
+    }
+
+    // Determine lead-time surcharge suffix
+    if (leadHours < 24) return base + '_short';
+    if (leadHours < 48) return base + '_priority';
+    return base;
+}
+
+function getDayMinPrice(date) {
+    // Cheapest possible price for a given day (used for calendar labels)
+    // The cheapest slot on any day is the normal-hours slot with best lead time
+    var leadToMidDay = getLeadTimeHours(date, '12:00');
+    var isHol = isHoliday(date);
+    var dow = date.getDay();
+    var isWeekend = (dow === 0 || dow === 6);
+
+    var base = '';
+    if (isHol) {
+        base = 'holiday_normal';
+    } else if (isWeekend) {
+        base = 'we_normal';
+    } else {
+        base = 'wd_normal';
+    }
+
+    if (leadToMidDay < 24) return ACUITY_TYPES[base + '_short'].price;
+    if (leadToMidDay < 48) return ACUITY_TYPES[base + '_priority'].price;
+    return ACUITY_TYPES[base].price;
+}
+
+function getSlotPrice(date, timeStr) {
+    var key = getSlotTierKey(date, timeStr);
+    return ACUITY_TYPES[key].price;
+}
+
+function getAcuityTypeId(date, timeStr) {
+    var key = getSlotTierKey(date, timeStr);
+    return ACUITY_TYPES[key].id;
 }
 
 function getSlotTier(date, timeStr) {
-    // Full tier calculation for a specific date+time
+    // Returns a human-readable tier name for display
     var leadHours = getLeadTimeHours(date, timeStr);
-    
-    if (isHoliday(date)) {
-        if (leadHours < 24) return 'holiday_sameday';
-        if (leadHours < 48) return 'holiday_short24to48';
-        return 'holiday_base';
-    }
-
-    if (leadHours < 24) return 'sameday';
-    if (leadHours < 48) return 'short24to48';
-
+    var isHol = isHoliday(date);
     var dow = date.getDay();
-    if (dow === 0) return 'sunday';
-    if (dow === 6) return 'saturday';
+    var isWeekend = (dow === 0 || dow === 6);
+    var isAfter = isAfterHoursSlot(timeStr);
 
-    var hour = parseInt(timeStr.split(':')[0], 10);
-    if (hour < PEAK_START) return 'offhours';
-    if (hour >= PEAK_END) return 'offhours';
-
-    return 'base';
-}
-
-function getDayMinPrice(date, size) {
-    // Cheapest possible price for a given day (used for calendar labels)
-    var dayTier = getDayTier(date);
-    var leadToMidDay = getLeadTimeHours(date, '12:00');
-    if (dayTier === 'holiday') {
-        if (leadToMidDay < 24) return ACUITY_TYPES[size + '|holiday_sameday'].price;
-        if (leadToMidDay < 48) return ACUITY_TYPES[size + '|holiday_short24to48'].price;
-        return ACUITY_TYPES[size + '|holiday_base'].price;
-    }
-    if (dayTier === 'sunday')   return ACUITY_TYPES[size + '|sunday'].price;
-    if (dayTier === 'saturday') return ACUITY_TYPES[size + '|saturday'].price;
-    // Weekday: check lead time
-    if (leadToMidDay < 24) return ACUITY_TYPES[size + '|sameday'].price;
-    if (leadToMidDay < 48) return ACUITY_TYPES[size + '|short24to48'].price;
-    return ACUITY_TYPES[size + '|base'].price;
-}
-
-function getSlotPrice(date, timeStr, size) {
-    var tier = getSlotTier(date, timeStr);
-    return ACUITY_TYPES[size + '|' + tier].price;
-}
-
-function getAcuityTypeId(date, timeStr, size) {
-    var tier = getSlotTier(date, timeStr);
-    return ACUITY_TYPES[size + '|' + tier].id;
+    if (leadHours < 24) return 'short_notice';
+    if (leadHours < 48) return 'priority';
+    if (isHol) return isAfter ? 'holiday_afterhours' : 'holiday';
+    if (isWeekend) return isAfter ? 'weekend_afterhours' : 'weekend';
+    return isAfter ? 'afterhours' : 'base';
 }
 
 function getTierLabel(tier) {
     var labels = {
         'base': 'Best Rate',
-        'offhours': 'Off-Hours',
-        'saturday': 'Saturday',
-        'sunday': 'Sunday',
-        'short24to48': 'Short Notice',
-        'sameday': 'Same Day',
-        'holiday_base': 'Holiday',
-        'holiday_short24to48': 'Holiday Short Notice',
-        'holiday_sameday': 'Holiday Same Day'
+        'afterhours': 'After Hours',
+        'weekend': 'Weekend',
+        'weekend_afterhours': 'Weekend After Hours',
+        'priority': 'Priority (25–48 hrs)',
+        'short_notice': 'Short Notice (<24 hrs)',
+        'holiday': 'Holiday',
+        'holiday_afterhours': 'Holiday After Hours'
     };
     return labels[tier] || tier;
 }
 
 function getTierClass(tier) {
     if (tier === 'base') return 'tier-best';
-    if (tier === 'offhours') return 'tier-mid';
-    if (tier === 'saturday') return 'tier-mid';
-    if (tier === 'sunday') return 'tier-high';
-    if (tier === 'short24to48') return 'tier-high';
-    if (tier === 'sameday') return 'tier-premium';
-    if (tier.indexOf('holiday') === 0) return 'tier-premium';
+    if (tier === 'afterhours' || tier === 'weekend' || tier === 'weekend_afterhours') return 'tier-mid';
+    if (tier === 'priority') return 'tier-high';
+    if (tier === 'short_notice' || tier === 'holiday' || tier === 'holiday_afterhours') return 'tier-premium';
     return '';
 }
 
@@ -256,77 +286,20 @@ document.addEventListener('DOMContentLoaded', function () {
         fadeEls.forEach(function (el) { fadeObserver.observe(el); });
     }
 
-}); // END DOMContentLoaded
-
-
-// ========== STEP 1: SELECT SIZE ==========
-
-function selectSize(size) {
-    selectedSize = size;
-    selectedDate = null;
-    selectedTime = null;
-
-    document.querySelectorAll('.size-option').forEach(function (btn) { btn.classList.remove('selected'); });
-    var buttons = document.querySelectorAll('.size-option');
-    if (size === 'small' && buttons[0]) buttons[0].classList.add('selected');
-    if (size === 'large' && buttons[1]) buttons[1].classList.add('selected');
-
-    // Collapse step 1
-    var step1 = document.getElementById('bookingStep1');
-    if (step1) { step1.classList.remove('active'); step1.classList.add('completed'); }
-
-    // Show step 2 (calendar)
-    var step2 = document.getElementById('bookingStep2');
-    if (step2) step2.style.display = 'block';
-
-    // Initialize calendar to current month
+    // ---------- AUTO-INITIALIZE CALENDAR ----------
+    // No size selection needed — auto-render calendar on page load
     var now = new Date();
     calendarMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     renderCalendar();
 
-    // Hide step 3 and Acuity embed
-    var step3 = document.getElementById('bookingStep3');
-    if (step3) step3.style.display = 'none';
-    var acuity = document.getElementById('acuityEmbed');
-    if (acuity) acuity.style.display = 'none';
-
-    // Scroll to step 2
-    setTimeout(function () {
-        var top = step2.getBoundingClientRect().top + window.pageYOffset - 100;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-    }, 100);
-}
-
-function changeSize() {
-    selectedSize = null;
-    selectedDate = null;
-    selectedTime = null;
-
-    var step1 = document.getElementById('bookingStep1');
-    if (step1) { step1.classList.remove('completed'); step1.classList.add('active'); }
-    document.querySelectorAll('.size-option').forEach(function (btn) { btn.classList.remove('selected'); });
-
-    var step2 = document.getElementById('bookingStep2');
-    if (step2) step2.style.display = 'none';
-    var step3 = document.getElementById('bookingStep3');
-    if (step3) step3.style.display = 'none';
-    var acuity = document.getElementById('acuityEmbed');
-    if (acuity) acuity.style.display = 'none';
-    var wrapper = document.getElementById('acuityIframeWrapper');
-    if (wrapper) wrapper.innerHTML = '';
-
-    setTimeout(function () {
-        var top = step1.getBoundingClientRect().top + window.pageYOffset - 100;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-    }, 50);
-}
+}); // END DOMContentLoaded
 
 
-// ========== STEP 2: CALENDAR ==========
+// ========== CALENDAR ==========
 
 function renderCalendar() {
     var cal = document.getElementById('pricingCalendar');
-    if (!cal || !selectedSize) return;
+    if (!cal) return;
 
     var today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -359,17 +332,25 @@ function renderCalendar() {
         var date = new Date(year, month, d);
         var isPast = date < today;
         var isSelected = selectedDate && isSameDay(date, selectedDate);
-        var tier = getDayTier(date);
-        var price = getDayMinPrice(date, selectedSize);
-        var tierClass = getTierClass(tier);
+        var dayType = getDayTier(date);
+        var price = getDayMinPrice(date);
         var holName = isHoliday(date);
+
+        // Map day type to tier class for calendar coloring
+        var calTierClass = 'tier-best';
+        if (dayType === 'weekend') calTierClass = 'tier-mid';
+        if (dayType === 'holiday') calTierClass = 'tier-premium';
+        // Check if lead-time surcharge applies to the day
+        var leadToMidDay = getLeadTimeHours(date, '12:00');
+        if (leadToMidDay < 48) calTierClass = 'tier-high';
+        if (leadToMidDay < 24) calTierClass = 'tier-premium';
 
         if (isPast) {
             html += '<div class="cal-cell cal-past">';
             html += '<span class="cal-day-num">' + d + '</span>';
             html += '</div>';
         } else {
-            html += '<div class="cal-cell cal-available ' + tierClass + (isSelected ? ' cal-selected' : '') + '" ' +
+            html += '<div class="cal-cell cal-available ' + calTierClass + (isSelected ? ' cal-selected' : '') + '" ' +
                      'onclick="selectDate(' + year + ',' + month + ',' + d + ')" ' +
                      'role="button" tabindex="0" aria-label="' + MONTH_NAMES[month] + ' ' + d + ', $' + price + '">';
             html += '<span class="cal-day-num">' + d + '</span>';
@@ -386,9 +367,9 @@ function renderCalendar() {
     // Legend
     html += '<div class="cal-legend">';
     html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-best"></span>Best Rate</span>';
-    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-mid"></span>Weekend / Off-Hours</span>';
-    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-high"></span>Short Notice</span>';
-    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-premium"></span>Holiday / Same Day</span>';
+    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-mid"></span>Weekend / After Hours</span>';
+    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-high"></span>Priority Notice (25–48 hrs)</span>';
+    html += '<span class="cal-legend-item"><span class="cal-legend-dot tier-premium"></span>Short Notice / Holiday</span>';
     html += '</div>';
 
     cal.innerHTML = html;
@@ -438,11 +419,11 @@ function selectDate(year, month, day) {
 }
 
 
-// ========== STEP 3: TIME SLOTS ==========
+// ========== TIME SLOTS ==========
 
 function renderTimeSlots() {
     var container = document.getElementById('timeSlots');
-    if (!container || !selectedDate || !selectedSize) return;
+    if (!container || !selectedDate) return;
 
     var now = new Date();
     var html = '';
@@ -453,28 +434,28 @@ function renderTimeSlots() {
 
     var hasSlots = false;
 
-    for (var h = SLOT_START; h < SLOT_END; h++) {
-        for (var m = 0; m < 60; m += SLOT_STEP) {
-            var timeStr = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
-            var slotDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), h, m, 0);
+    for (var i = 0; i < ALL_SLOTS.length; i++) {
+        var timeStr = ALL_SLOTS[i];
+        var parts = timeStr.split(':');
+        var slotDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(),
+                                parseInt(parts[0], 10), parseInt(parts[1], 10), 0);
 
-            // Skip slots in the past
-            if (slotDate <= now) continue;
+        // Skip slots in the past
+        if (slotDate <= now) continue;
 
-            var tier = getSlotTier(selectedDate, timeStr);
-            var price = getSlotPrice(selectedDate, timeStr, selectedSize);
-            var tierClass = getTierClass(tier);
-            var tierLabel = getTierLabel(tier);
-            var isSelected = selectedTime === timeStr;
+        var tier = getSlotTier(selectedDate, timeStr);
+        var price = getSlotPrice(selectedDate, timeStr);
+        var tierClass = getTierClass(tier);
+        var tierLabel = getTierLabel(tier);
+        var isSelected = selectedTime === timeStr;
 
-            html += '<button class="time-slot ' + tierClass + (isSelected ? ' time-slot-selected' : '') + '" ' +
-                     'onclick="selectTime(\'' + timeStr + '\')">' +
-                     '<span class="time-slot-time">' + formatTime12(timeStr) + '</span>' +
-                     '<span class="time-slot-price">$' + price + '</span>' +
-                     '<span class="time-slot-tier">' + tierLabel + '</span>' +
-                     '</button>';
-            hasSlots = true;
-        }
+        html += '<button class="time-slot ' + tierClass + (isSelected ? ' time-slot-selected' : '') + '" ' +
+                 'onclick="selectTime(\'' + timeStr + '\')">' +
+                 '<span class="time-slot-time">' + formatTime12(timeStr) + '</span>' +
+                 '<span class="time-slot-price">$' + price + '</span>' +
+                 '<span class="time-slot-tier">' + tierLabel + '</span>' +
+                 '</button>';
+        hasSlots = true;
     }
 
     if (!hasSlots) {
@@ -515,10 +496,10 @@ function changeDate() {
 // ========== STEP 4: ACUITY EMBED ==========
 
 function loadAcuityEmbed() {
-    if (!selectedSize || !selectedDate || !selectedTime) return;
+    if (!selectedDate || !selectedTime) return;
 
-    var typeId = getAcuityTypeId(selectedDate, selectedTime, selectedSize);
-    var price  = getSlotPrice(selectedDate, selectedTime, selectedSize);
+    var typeId = getAcuityTypeId(selectedDate, selectedTime);
+    var price  = getSlotPrice(selectedDate, selectedTime);
     var tier   = getSlotTier(selectedDate, selectedTime);
     var tierLabel = getTierLabel(tier);
     var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&appointmentType=' + typeId + '&notHeader=1';
@@ -531,13 +512,12 @@ function loadAcuityEmbed() {
     iframeSrc += '&date=' + dateParam;
 
     // Description
-    var sizeLabel = selectedSize === 'small' ? 'Up to 2,250 sq ft' : '2,251\u20132,500 sq ft';
     var dateLabel = MONTH_NAMES[selectedDate.getMonth()] + ' ' + selectedDate.getDate() + ', ' + selectedDate.getFullYear();
     var timeLabel = formatTime12(selectedTime);
 
     var descEl = document.getElementById('acuitySelectedType');
     if (descEl) {
-        descEl.textContent = sizeLabel + ' \u2022 ' + dateLabel + ' at ' + timeLabel + ' \u2022 $' + price + ' (' + tierLabel + ')';
+        descEl.textContent = dateLabel + ' at ' + timeLabel + ' \u2022 $' + price + ' (' + tierLabel + ')';
     }
 
     // Inject iframe
