@@ -374,6 +374,76 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .time-slot.tier-premium { background: #fff0f3; border-color: #f48fb1; }
 .time-slot.tier-premium .time-slot-price { color: #c62828; }
 
+/* ---------- CUSTOM TIME REQUEST ---------- */
+.custom-time-section { max-width: 700px; margin: 20px auto 0; text-align: center; }
+.custom-time-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; color: #1F4E79; font-size: 0.88rem;
+    font-weight: 600; cursor: pointer; padding: 8px 14px;
+    border-radius: 8px; transition: background 0.2s, color 0.2s;
+}
+.custom-time-toggle:hover { background: #eaf2fb; }
+.custom-time-toggle-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #1F4E79; color: #fff; font-size: 0.85rem;
+    font-weight: 700; line-height: 1;
+}
+.custom-time-form-wrapper {
+    margin-top: 14px; padding: 22px 20px 20px;
+    background: #f9fbfe; border: 1px solid #dce6f0;
+    border-radius: 12px; text-align: left;
+    animation: ctSlideDown 0.25s ease-out;
+}
+@keyframes ctSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.custom-time-form-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+}
+.custom-time-field label {
+    display: block; font-size: 0.8rem; font-weight: 600;
+    color: #2D2D2D; margin-bottom: 4px;
+}
+.custom-time-field input,
+.custom-time-field textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid #cfd8e3;
+    border-radius: 8px; font-size: 0.88rem; color: #333;
+    background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; font-family: inherit;
+}
+.custom-time-field input:focus,
+.custom-time-field textarea:focus {
+    outline: none; border-color: #1F4E79;
+    box-shadow: 0 0 0 3px rgba(31,78,121,0.1);
+}
+.custom-time-date-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #eaf2fb; color: #1F4E79; font-size: 0.78rem;
+    padding: 5px 12px; border-radius: 6px; margin: 12px 0 4px;
+}
+.custom-time-submit {
+    margin-top: 12px; padding: 11px 28px !important;
+    font-size: 0.92rem !important; border-radius: 8px !important;
+}
+.custom-time-success {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 24px 16px; text-align: center;
+}
+.custom-time-success-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: #5BA94B; color: #fff; font-size: 1.6rem;
+    display: flex; align-items: center; justify-content: center;
+}
+.custom-time-success p { font-size: 0.92rem; color: #333; margin: 0; }
+
+@media (max-width: 520px) {
+    .custom-time-form-grid { grid-template-columns: 1fr; }
+    .custom-time-form-wrapper { padding: 16px 14px; }
+}
+
 /* ---------- PRICING SUMMARY BOX ---------- */
 .pricing-summary-box { max-width: 700px; margin: 36px auto 0; background: #F7F8FA; border-radius: 14px; padding: 28px 24px; border: 1px solid #e8ecf0; }
 .pricing-summary-box h4 { text-align: center; font-size: 1.1rem; color: #1F4E79; margin: 0 0 16px; }

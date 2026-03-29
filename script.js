@@ -463,8 +463,106 @@ function renderTimeSlots() {
     }
 
     html += '</div>';
+
+    // "Request a Custom Time" collapsible section
+    html += '<div class="custom-time-section">';
+    html += '<button class="custom-time-toggle" onclick="toggleCustomTimeForm()" type="button">';
+    html += '<span class="custom-time-toggle-icon" id="customTimeIcon">+</span> ';
+    html += 'Don\u2019t see a time that works? Request a custom slot';
+    html += '</button>';
+    html += '<div class="custom-time-form-wrapper" id="customTimeFormWrapper" style="display:none;">';
+    html += '<form class="custom-time-form" id="customTimeForm" onsubmit="return handleCustomTimeSubmit(event)">';
+    html += '<input type="hidden" name="_subject" value="Custom Time Request \u2013 PDX Home Energy Score">';
+    html += '<input type="hidden" name="request_type" value="Custom Time Slot Request">';
+    html += '<input type="hidden" name="requested_date" value="' + dateStr + '">';
+    html += '<div class="custom-time-form-grid">';
+    html += '<div class="custom-time-field">';
+    html += '<label for="ctName">Name</label>';
+    html += '<input type="text" id="ctName" name="name" required placeholder="Your name">';
+    html += '</div>';
+    html += '<div class="custom-time-field">';
+    html += '<label for="ctEmail">Email</label>';
+    html += '<input type="email" id="ctEmail" name="email" required placeholder="you@example.com">';
+    html += '</div>';
+    html += '<div class="custom-time-field">';
+    html += '<label for="ctPhone">Phone <span style="font-weight:400;color:#999;">(optional)</span></label>';
+    html += '<input type="tel" id="ctPhone" name="phone" placeholder="(503) 555-1234">';
+    html += '</div>';
+    html += '<div class="custom-time-field">';
+    html += '<label for="ctTime">Preferred Time</label>';
+    html += '<input type="text" id="ctTime" name="preferred_time" required placeholder="e.g. 7:30 AM, early afternoon">';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="custom-time-field" style="margin-top:4px;">';
+    html += '<label for="ctNotes">Notes <span style="font-weight:400;color:#999;">(optional)</span></label>';
+    html += '<textarea id="ctNotes" name="notes" rows="2" placeholder="Any additional details or scheduling preferences"></textarea>';
+    html += '</div>';
+    html += '<p class="custom-time-date-badge">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
+    html += ' Requesting for <strong>' + dateStr + '</strong>';
+    html += '</p>';
+    html += '<button type="submit" class="btn btn-primary custom-time-submit" id="ctSubmitBtn">Send Request</button>';
+    html += '</form>';
+    html += '<div class="custom-time-success" id="customTimeSuccess" style="display:none;">';
+    html += '<div class="custom-time-success-icon">\u2713</div>';
+    html += '<p><strong>Request sent!</strong> We\u2019ll get back to you shortly to confirm your custom time slot.</p>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+
     container.innerHTML = html;
 }
+
+/* ----------  Custom Time Request helpers  ---------- */
+
+function toggleCustomTimeForm() {
+    var wrapper = document.getElementById('customTimeFormWrapper');
+    var icon = document.getElementById('customTimeIcon');
+    if (!wrapper) return;
+    if (wrapper.style.display === 'none') {
+        wrapper.style.display = 'block';
+        if (icon) icon.textContent = '\u2212'; // minus sign
+    } else {
+        wrapper.style.display = 'none';
+        if (icon) icon.textContent = '+';
+    }
+}
+
+function handleCustomTimeSubmit(e) {
+    e.preventDefault();
+    var form = document.getElementById('customTimeForm');
+    var btn = document.getElementById('ctSubmitBtn');
+    if (!form) return false;
+
+    btn.disabled = true;
+    btn.textContent = 'Sending\u2026';
+
+    var data = new FormData(form);
+
+    fetch('https://formspree.io/f/xdkozpqr', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+    }).then(function(response) {
+        if (response.ok) {
+            form.style.display = 'none';
+            var successEl = document.getElementById('customTimeSuccess');
+            if (successEl) successEl.style.display = 'flex';
+        } else {
+            btn.disabled = false;
+            btn.textContent = 'Send Request';
+            alert('Something went wrong. Please try again or contact us directly.');
+        }
+    }).catch(function() {
+        btn.disabled = false;
+        btn.textContent = 'Send Request';
+        alert('Network error. Please check your connection and try again.');
+    });
+
+    return false;
+}
+
+/* ---------------------------------------------------- */
 
 function selectTime(timeStr) {
     selectedTime = timeStr;
