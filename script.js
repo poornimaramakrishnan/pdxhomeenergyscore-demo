@@ -13,10 +13,13 @@ var ACUITY_BASE  = 'https://app.acuityscheduling.com/schedule.php';
 // Hillsboro has dedicated appointment types with +$50 baked into the price.
 //
 // PRICING MATRIX (48+ hours notice):
-//   Weekday Normal (9am-3pm):        $159  ($209 Hillsboro)
-//   Weekday After Hours (4:30pm+):   $179  ($229 Hillsboro)
-//   Saturday:                         $179  ($229 Hillsboro)
-//   Sunday:                           $199  ($249 Hillsboro)
+//   Weekday Normal (9am-3pm):            $159  ($209 Hillsboro)
+//   Weekday After Hours (4:30pm+):       $179  ($229 Hillsboro)
+//   Saturday Normal (9am-3pm):           $179  ($229 Hillsboro)
+//   Saturday After Hours (4:30pm+):      $209  ($259 Hillsboro)
+//   Sunday Normal (9am-3pm):             $199  ($249 Hillsboro)
+//   Sunday After Hours (4:30pm+):        $209  ($259 Hillsboro)
+//   Holiday:                              $219  ($269 Hillsboro)
 //
 // SURCHARGES (added to base):
 //   Priority Notice (25-48 hours): +$20
@@ -47,24 +50,30 @@ var ACUITY_TYPES = {
     'wd_normal_priority':     { id: '91186204', price: 179 },   // +20
     'wd_normal_short':        { id: '91186244', price: 199 },   // +40
 
-    // ── Weekday After Hours (4:30pm+) + Saturday ──
+    // ── Weekday After Hours (4:30pm+) ──
     'wd_afterhours':          { id: '91186284', price: 179 },
     'wd_afterhours_priority': { id: '91186335', price: 199 },   // +20
     'wd_afterhours_short':    { id: '91186606', price: 219 },   // +40
+
+    // ── Saturday Normal (9am-3pm) — same rate as weekday after-hours ──
     'sat_normal':             { id: '91186284', price: 179 },
     'sat_normal_priority':    { id: '91186335', price: 199 },   // +20
     'sat_normal_short':       { id: '91186606', price: 219 },   // +40
-    'sat_afterhours':         { id: '91186284', price: 179 },
-    'sat_afterhours_priority':{ id: '91186335', price: 199 },   // +20
-    'sat_afterhours_short':   { id: '91186606', price: 219 },   // +40
 
-    // ── Sunday ──
+    // ── Saturday After Hours (4:30pm+) — Weekend After Hours tier ──
+    'sat_afterhours':         { id: '91337692', price: 209 },
+    'sat_afterhours_priority':{ id: '91337762', price: 229 },   // +20
+    'sat_afterhours_short':   { id: '91337786', price: 249 },   // +40
+
+    // ── Sunday Normal (9am-3pm) ──
     'sun_normal':             { id: '91191874', price: 199 },
     'sun_normal_priority':    { id: '91193034', price: 219 },   // +20
     'sun_normal_short':       { id: '91192042', price: 239 },   // +40
-    'sun_afterhours':         { id: '91191874', price: 199 },
-    'sun_afterhours_priority':{ id: '91193034', price: 219 },   // +20
-    'sun_afterhours_short':   { id: '91192042', price: 239 },   // +40
+
+    // ── Sunday After Hours (4:30pm+) — Weekend After Hours tier ──
+    'sun_afterhours':         { id: '91337692', price: 209 },
+    'sun_afterhours_priority':{ id: '91337762', price: 229 },   // +20
+    'sun_afterhours_short':   { id: '91337786', price: 249 },   // +40
 
     // ── Holiday ──
     'holiday_normal':              { id: '91186164', price: 219 },
@@ -82,24 +91,30 @@ var ACUITY_TYPES_HILLSBORO = {
     'wd_normal_priority':     { id: '91306429', price: 229 },   // +20
     'wd_normal_short':        { id: '91306474', price: 249 },   // +40
 
-    // ── Weekday After Hours (4:30pm+) + Saturday ──
+    // ── Weekday After Hours (4:30pm+) ──
     'wd_afterhours':          { id: '91306524', price: 229 },
     'wd_afterhours_priority': { id: '91309456', price: 249 },   // +20
     'wd_afterhours_short':    { id: '91309499', price: 269 },   // +40
+
+    // ── Saturday Normal (9am-3pm) — same rate as weekday after-hours ──
     'sat_normal':             { id: '91306524', price: 229 },
     'sat_normal_priority':    { id: '91309456', price: 249 },   // +20
     'sat_normal_short':       { id: '91309499', price: 269 },   // +40
-    'sat_afterhours':         { id: '91306524', price: 229 },
-    'sat_afterhours_priority':{ id: '91309456', price: 249 },   // +20
-    'sat_afterhours_short':   { id: '91309499', price: 269 },   // +40
 
-    // ── Sunday ──
+    // ── Saturday After Hours (4:30pm+) — Weekend After Hours tier ──
+    'sat_afterhours':         { id: '91337892', price: 259 },
+    'sat_afterhours_priority':{ id: '91337939', price: 279 },   // +20
+    'sat_afterhours_short':   { id: '91337989', price: 299 },   // +40
+
+    // ── Sunday Normal (9am-3pm) ──
     'sun_normal':             { id: '91307199', price: 249 },
     'sun_normal_priority':    { id: '91307241', price: 269 },   // +20
     'sun_normal_short':       { id: '91307281', price: 289 },   // +40
-    'sun_afterhours':         { id: '91307199', price: 249 },
-    'sun_afterhours_priority':{ id: '91307241', price: 269 },   // +20
-    'sun_afterhours_short':   { id: '91307281', price: 289 },   // +40
+
+    // ── Sunday After Hours (4:30pm+) — Weekend After Hours tier ──
+    'sun_afterhours':         { id: '91337892', price: 259 },
+    'sun_afterhours_priority':{ id: '91337939', price: 279 },   // +20
+    'sun_afterhours_short':   { id: '91337989', price: 299 },   // +40
 
     // ── Holiday ──
     'holiday_normal':              { id: '91309647', price: 269 },
