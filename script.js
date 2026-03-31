@@ -1,6 +1,7 @@
 ﻿/* ============================================
-   PDX Home Energy Score - JavaScript v3.0
+   PDX Home Energy Score - JavaScript v3.2
    Dynamic Pricing + Custom Calendar + Acuity Embed
+   City selector (Hillsboro = dedicated +$50 appointment types)
    ============================================ */
 
 // ========== ACUITY CONFIG ==========
@@ -8,53 +9,105 @@ var ACUITY_OWNER = '37810233';
 var ACUITY_BASE  = 'https://app.acuityscheduling.com/schedule.php';
 
 // ========== PRICING RULES ==========
-// New simplified pricing model — single size category (up to 2,250 sq ft).
-// Base prices vary by day type and time-of-day category.
-// Surcharges are additive based on lead time.
+// Single tier: Up to 2,500 sq ft.
+// Hillsboro has dedicated appointment types with +$50 baked into the price.
 //
 // PRICING MATRIX (48+ hours notice):
-//   Weekday Normal (9am-3pm):        $159
-//   Weekday After Hours (3:30pm-7pm): $179
-//   Weekend Normal (9am-3pm):         $199
-//   Weekend After Hours (3:30pm-7pm): $209
+//   Weekday Normal (9am-3pm):        $159  ($209 Hillsboro)
+//   Weekday After Hours (4:30pm+):   $179  ($229 Hillsboro)
+//   Saturday:                         $179  ($229 Hillsboro)
+//   Sunday:                           $199  ($249 Hillsboro)
 //
 // SURCHARGES (added to base):
-//   Priority Notice (25-48 hours): +$30
-//   Short Notice (within 24 hours): +$60
+//   Priority Notice (25-48 hours): +$20
+//   Short Notice (within 24 hours): +$40
 //
 // FIXED TIME SLOTS:
 //   Normal:      9:00 AM, 12:15 PM, 3:00 PM
 //   After Hours: 4:30 PM, 6:30 PM
 
-// Acuity appointment type IDs — one per unique price point
+// City surcharge amounts (for display purposes only — Hillsboro routes to dedicated types)
+var CITY_SURCHARGE = {
+    'portland':  0,
+    'salem':     0,
+    'hillsboro': 50
+};
+
+// Display labels for each city key (Portland covers Milwaukie too)
+var CITY_LABELS = {
+    'portland':  'Portland & Milwaukie',
+    'salem':     'Salem',
+    'hillsboro': 'Hillsboro'
+};
+
+// Acuity appointment type IDs — Portland / Milwaukie / Salem (up to 2,500 sq ft)
 var ACUITY_TYPES = {
     // ── Weekday Normal (9am-3pm) ──
     'wd_normal':              { id: '91186136', price: 159 },
-    'wd_normal_priority':     { id: '91186335', price: 189 },   // 159 + 30
-    'wd_normal_short':        { id: '91186606', price: 219 },   // 159 + 60
+    'wd_normal_priority':     { id: '91186204', price: 179 },   // +20
+    'wd_normal_short':        { id: '91186244', price: 199 },   // +40
 
-    // ── Weekday After Hours (3:30pm-7pm) ──
-    'wd_afterhours':          { id: '91186204', price: 179 },
-    'wd_afterhours_priority': { id: '91186335', price: 209 },   // 179 + 30
-    'wd_afterhours_short':    { id: '91186606', price: 239 },   // 179 + 60
+    // ── Weekday After Hours (4:30pm+) + Saturday ──
+    'wd_afterhours':          { id: '91186284', price: 179 },
+    'wd_afterhours_priority': { id: '91186335', price: 199 },   // +20
+    'wd_afterhours_short':    { id: '91186606', price: 219 },   // +40
+    'sat_normal':             { id: '91186284', price: 179 },
+    'sat_normal_priority':    { id: '91186335', price: 199 },   // +20
+    'sat_normal_short':       { id: '91186606', price: 219 },   // +40
+    'sat_afterhours':         { id: '91186284', price: 179 },
+    'sat_afterhours_priority':{ id: '91186335', price: 199 },   // +20
+    'sat_afterhours_short':   { id: '91186606', price: 219 },   // +40
 
-    // ── Weekend Normal (9am-3pm) ──
-    'we_normal':              { id: '91186244', price: 199 },
-    'we_normal_priority':     { id: '91186367', price: 229 },   // 199 + 30
-    'we_normal_short':        { id: '91191641', price: 259 },   // 199 + 60
-
-    // ── Weekend After Hours (3:30pm-7pm) ──
-    'we_afterhours':          { id: '91186269', price: 209 },
-    'we_afterhours_priority': { id: '91186367', price: 239 },   // 209 + 30
-    'we_afterhours_short':    { id: '91191641', price: 269 },   // 209 + 60
+    // ── Sunday ──
+    'sun_normal':             { id: '91191874', price: 199 },
+    'sun_normal_priority':    { id: '91193034', price: 219 },   // +20
+    'sun_normal_short':       { id: '91192042', price: 239 },   // +40
+    'sun_afterhours':         { id: '91191874', price: 199 },
+    'sun_afterhours_priority':{ id: '91193034', price: 219 },   // +20
+    'sun_afterhours_short':   { id: '91192042', price: 239 },   // +40
 
     // ── Holiday ──
-    'holiday_normal':         { id: '91191874', price: 219 },
-    'holiday_normal_priority': { id: '91193034', price: 249 },  // 219 + 30
-    'holiday_normal_short':   { id: '91192042', price: 279 },   // 219 + 60
-    'holiday_afterhours':     { id: '91193082', price: 239 },
-    'holiday_afterhours_priority': { id: '91193127', price: 269 }, // 239 + 30
-    'holiday_afterhours_short': { id: '91193105', price: 299 }  // 239 + 60
+    'holiday_normal':              { id: '91186164', price: 219 },
+    'holiday_normal_priority':     { id: '91186221', price: 239 },   // +20
+    'holiday_normal_short':        { id: '91186269', price: 259 },   // +40
+    'holiday_afterhours':          { id: '91186164', price: 219 },
+    'holiday_afterhours_priority': { id: '91186221', price: 239 },   // +20
+    'holiday_afterhours_short':    { id: '91186269', price: 259 }    // +40
+};
+
+// Acuity appointment type IDs — Hillsboro only (+$50 baked into each price)
+var ACUITY_TYPES_HILLSBORO = {
+    // ── Weekday Normal (9am-3pm) ──
+    'wd_normal':              { id: '91306360', price: 209 },
+    'wd_normal_priority':     { id: '91306429', price: 229 },   // +20
+    'wd_normal_short':        { id: '91306474', price: 249 },   // +40
+
+    // ── Weekday After Hours (4:30pm+) + Saturday ──
+    'wd_afterhours':          { id: '91306524', price: 229 },
+    'wd_afterhours_priority': { id: '91309456', price: 249 },   // +20
+    'wd_afterhours_short':    { id: '91309499', price: 269 },   // +40
+    'sat_normal':             { id: '91306524', price: 229 },
+    'sat_normal_priority':    { id: '91309456', price: 249 },   // +20
+    'sat_normal_short':       { id: '91309499', price: 269 },   // +40
+    'sat_afterhours':         { id: '91306524', price: 229 },
+    'sat_afterhours_priority':{ id: '91309456', price: 249 },   // +20
+    'sat_afterhours_short':   { id: '91309499', price: 269 },   // +40
+
+    // ── Sunday ──
+    'sun_normal':             { id: '91307199', price: 249 },
+    'sun_normal_priority':    { id: '91307241', price: 269 },   // +20
+    'sun_normal_short':       { id: '91307281', price: 289 },   // +40
+    'sun_afterhours':         { id: '91307199', price: 249 },
+    'sun_afterhours_priority':{ id: '91307241', price: 269 },   // +20
+    'sun_afterhours_short':   { id: '91307281', price: 289 },   // +40
+
+    // ── Holiday ──
+    'holiday_normal':              { id: '91309647', price: 269 },
+    'holiday_normal_priority':     { id: '91309661', price: 289 },   // +20
+    'holiday_normal_short':        { id: '91309705', price: 309 },   // +40
+    'holiday_afterhours':          { id: '91309647', price: 269 },
+    'holiday_afterhours_priority': { id: '91309661', price: 289 },   // +20
+    'holiday_afterhours_short':    { id: '91309705', price: 309 }    // +40
 };
 
 // Holidays (month/day) — price is always the holiday tier
@@ -78,18 +131,24 @@ var ALL_SLOTS        = NORMAL_SLOTS.concat(AFTERHOURS_SLOTS);
 var PEAK_END_HOUR = 15;  // slots at 15:00 (3 PM) and before are "normal"
 
 // ========== STATE ==========
-var selectedSize = 'small';  // single size category — always 'small'
-var selectedDate = null;     // Date object
-var selectedTime = null;     // '09:00', '12:15', etc.
-var calendarMonth = null;    // Date object (1st of displayed month)
+var selectedCity = 'portland';   // 'portland', 'milwaukie', 'salem', 'hillsboro'
+var selectedDate = null;        // Date object
+var selectedTime = null;        // '09:00', '12:15', etc.
+var calendarMonth = null;       // Date object (1st of displayed month)
 
 // ========== HELPERS ==========
+
+function getCitySurcharge() {
+    return CITY_SURCHARGE[selectedCity] || 0;
+}
 
 function isHoliday(date) {
     var m = date.getMonth() + 1;
     var d = date.getDate();
     for (var i = 0; i < HOLIDAYS.length; i++) {
-        if (HOLIDAYS[i].m === m && HOLIDAYS[i].d === d) return HOLIDAYS[i].name;
+        if (HOLIDAYS[i].m === m) {
+            if (HOLIDAYS[i].d === d) return HOLIDAYS[i].name;
+        }
     }
     return false;
 }
@@ -120,15 +179,18 @@ function getSlotTierKey(date, timeStr) {
     var leadHours = getLeadTimeHours(date, timeStr);
     var isHol = isHoliday(date);
     var dow = date.getDay();
-    var isWeekend = (dow === 0 || dow === 6);
+    var isSat = (dow === 6);
+    var isSun = (dow === 0);
     var isAfter = isAfterHoursSlot(timeStr);
 
     // Determine day+time base
     var base = '';
     if (isHol) {
         base = isAfter ? 'holiday_afterhours' : 'holiday_normal';
-    } else if (isWeekend) {
-        base = isAfter ? 'we_afterhours' : 'we_normal';
+    } else if (isSun) {
+        base = isAfter ? 'sun_afterhours' : 'sun_normal';
+    } else if (isSat) {
+        base = isAfter ? 'sat_afterhours' : 'sat_normal';
     } else {
         base = isAfter ? 'wd_afterhours' : 'wd_normal';
     }
@@ -141,33 +203,49 @@ function getSlotTierKey(date, timeStr) {
 
 function getDayMinPrice(date) {
     // Cheapest possible price for a given day (used for calendar labels)
-    // The cheapest slot on any day is the normal-hours slot with best lead time
+    var surcharge = getCitySurcharge();
     var leadToMidDay = getLeadTimeHours(date, '12:00');
     var isHol = isHoliday(date);
     var dow = date.getDay();
-    var isWeekend = (dow === 0 || dow === 6);
+    var isSat = (dow === 6);
+    var isSun = (dow === 0);
 
     var base = '';
     if (isHol) {
         base = 'holiday_normal';
-    } else if (isWeekend) {
-        base = 'we_normal';
+    } else if (isSun) {
+        base = 'sun_normal';
+    } else if (isSat) {
+        base = 'sat_normal';
     } else {
         base = 'wd_normal';
     }
 
-    if (leadToMidDay < 24) return ACUITY_TYPES[base + '_short'].price;
-    if (leadToMidDay < 48) return ACUITY_TYPES[base + '_priority'].price;
-    return ACUITY_TYPES[base].price;
+    var key = base;
+    if (leadToMidDay < 24) key = base + '_short';
+    else if (leadToMidDay < 48) key = base + '_priority';
+    // Hillsboro: prices are baked into dedicated appointment types — no surcharge add-on needed
+    if (selectedCity === 'hillsboro') {
+        return ACUITY_TYPES_HILLSBORO[key].price;
+    }
+    return ACUITY_TYPES[key].price + surcharge;
 }
 
 function getSlotPrice(date, timeStr) {
     var key = getSlotTierKey(date, timeStr);
-    return ACUITY_TYPES[key].price;
+    // Hillsboro: prices are baked into dedicated appointment types — no surcharge add-on needed
+    if (selectedCity === 'hillsboro') {
+        return ACUITY_TYPES_HILLSBORO[key].price;
+    }
+    return ACUITY_TYPES[key].price + getCitySurcharge();
 }
 
 function getAcuityTypeId(date, timeStr) {
     var key = getSlotTierKey(date, timeStr);
+    // Hillsboro: use dedicated appointment types with +$50 baked in
+    if (selectedCity === 'hillsboro') {
+        return ACUITY_TYPES_HILLSBORO[key].id;
+    }
     return ACUITY_TYPES[key].id;
 }
 
@@ -176,13 +254,15 @@ function getSlotTier(date, timeStr) {
     var leadHours = getLeadTimeHours(date, timeStr);
     var isHol = isHoliday(date);
     var dow = date.getDay();
-    var isWeekend = (dow === 0 || dow === 6);
+    var isSat = (dow === 6);
+    var isSun = (dow === 0);
     var isAfter = isAfterHoursSlot(timeStr);
 
     if (leadHours < 24) return 'short_notice';
     if (leadHours < 48) return 'priority';
     if (isHol) return isAfter ? 'holiday_afterhours' : 'holiday';
-    if (isWeekend) return isAfter ? 'weekend_afterhours' : 'weekend';
+    if (isSun) return isAfter ? 'sunday_afterhours' : 'sunday';
+    if (isSat) return isAfter ? 'saturday_afterhours' : 'saturday';
     return isAfter ? 'afterhours' : 'base';
 }
 
@@ -190,8 +270,10 @@ function getTierLabel(tier) {
     var labels = {
         'base': 'Best Rate',
         'afterhours': 'After Hours',
-        'weekend': 'Weekend',
-        'weekend_afterhours': 'Weekend After Hours',
+        'saturday': 'Saturday',
+        'saturday_afterhours': 'Saturday After Hours',
+        'sunday': 'Sunday',
+        'sunday_afterhours': 'Sunday After Hours',
         'priority': 'Priority (25–48 hrs)',
         'short_notice': 'Short Notice (<24 hrs)',
         'holiday': 'Holiday',
@@ -202,7 +284,8 @@ function getTierLabel(tier) {
 
 function getTierClass(tier) {
     if (tier === 'base') return 'tier-best';
-    if (tier === 'afterhours' || tier === 'weekend' || tier === 'weekend_afterhours') return 'tier-mid';
+    if (tier === 'afterhours' || tier === 'saturday' || tier === 'saturday_afterhours' ||
+        tier === 'sunday' || tier === 'sunday_afterhours') return 'tier-mid';
     if (tier === 'priority') return 'tier-high';
     if (tier === 'short_notice' || tier === 'holiday' || tier === 'holiday_afterhours') return 'tier-premium';
     return '';
@@ -218,14 +301,25 @@ function formatTime12(timeStr) {
 }
 
 function isSameDay(a, b) {
-    return a.getFullYear() === b.getFullYear() &&
-           a.getMonth() === b.getMonth() &&
-           a.getDate() === b.getDate();
+    if (a.getFullYear() !== b.getFullYear()) return false;
+    if (a.getMonth() !== b.getMonth()) return false;
+    return a.getDate() === b.getDate();
 }
 
 var MONTH_NAMES = ['January','February','March','April','May','June',
                    'July','August','September','October','November','December'];
 var DAY_HEADERS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function formatDateISO(date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    return y + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d;
+}
+
+function getDateInputMin() {
+    return formatDateISO(new Date());
+}
 
 // ========== DOM READY ==========
 document.addEventListener('DOMContentLoaded', function () {
@@ -287,12 +381,111 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ---------- AUTO-INITIALIZE CALENDAR ----------
-    // No size selection needed — auto-render calendar on page load
+    // Calendar will be rendered after user confirms city (Step 1)
     var now = new Date();
     calendarMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    renderCalendar();
+
+    // ---------- BIND CITY OPTION BUTTONS ----------
+    document.querySelectorAll('.city-option').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            selectCity(this.getAttribute('data-city'));
+        });
+    });
+
+    // ---------- BIND CONTINUE / CHANGE BUTTONS ----------
+    var continueBtn = document.getElementById('continueToCalendar');
+    if (continueBtn) continueBtn.addEventListener('click', confirmCity);
+
+    var changeCityBtn = document.getElementById('changeCityBtn');
+    if (changeCityBtn) changeCityBtn.addEventListener('click', changeCity);
+
+    var changeDateBtn = document.getElementById('changeDateBtn');
+    if (changeDateBtn) changeDateBtn.addEventListener('click', changeDate);
+
+    var changeTimeBtn = document.getElementById('changeTimeBtn');
+    if (changeTimeBtn) changeTimeBtn.addEventListener('click', changeTime);
 
 }); // END DOMContentLoaded
+
+
+// ========== CITY SELECTION (STEP 1) ==========
+
+function selectCity(city) {
+    selectedCity = city;
+    // Update button states
+    var btns = document.querySelectorAll('.city-option');
+    btns.forEach(function(btn) {
+        btn.classList.toggle('selected', btn.getAttribute('data-city') === city);
+    });
+    // Show/hide Hillsboro notice
+    var notice = document.getElementById('hillsboroNotice');
+    if (notice) notice.style.display = city === 'hillsboro' ? 'flex' : 'none';
+}
+
+function confirmCity() {
+    // Hide step 1, show step 2 (calendar)
+    var step1 = document.getElementById('bookingStep1');
+    var step2 = document.getElementById('bookingStep2');
+    if (step1) step1.style.display = 'none';
+    if (step2) step2.style.display = 'block';
+
+    // Update city chip in step 2 header
+    var cityLabel = CITY_LABELS[selectedCity] || selectedCity;
+    var pinSvg = '<svg class="chip-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
+    var chip2 = document.getElementById('selectedCityChip2');
+    if (chip2) {
+        chip2.innerHTML = pinSvg + ' ' + cityLabel;
+        chip2.className = 'selected-city-chip' + (selectedCity === 'hillsboro' ? ' is-hillsboro' : '');
+    }
+    // Show/hide persistent Hillsboro notice in step 2
+    var notice2 = document.getElementById('hillsboroNoticePersistent2');
+    if (notice2) notice2.style.display = selectedCity === 'hillsboro' ? 'flex' : 'none';
+
+    // Reset date/time
+    selectedDate = null;
+    selectedTime = null;
+
+    // Render the calendar with correct pricing
+    renderCalendar();
+
+    setTimeout(function () {
+        var top = step2.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+    }, 100);
+}
+
+function changeCity() {
+    // Go back to step 1
+    selectedDate = null;
+    selectedTime = null;
+
+    var step1 = document.getElementById('bookingStep1');
+    var step2 = document.getElementById('bookingStep2');
+    var step3 = document.getElementById('bookingStep3');
+    var acuity = document.getElementById('acuityEmbed');
+    var wrapper = document.getElementById('acuityIframeWrapper');
+
+    if (step1) step1.style.display = 'block';
+    if (step2) step2.style.display = 'none';
+    if (step3) step3.style.display = 'none';
+    if (acuity) acuity.style.display = 'none';
+    if (wrapper) wrapper.innerHTML = '';
+
+    // Clear city chips and persistent notices
+    var chip2 = document.getElementById('selectedCityChip2');
+    if (chip2) { chip2.innerHTML = ''; chip2.className = 'selected-city-chip'; }
+    var chip3 = document.getElementById('selectedCityChip3');
+    if (chip3) { chip3.innerHTML = ''; chip3.className = 'selected-city-chip'; }
+    var notice2 = document.getElementById('hillsboroNoticePersistent2');
+    if (notice2) notice2.style.display = 'none';
+    var notice3 = document.getElementById('hillsboroNoticePersistent3');
+    if (notice3) notice3.style.display = 'none';
+
+    setTimeout(function () {
+        var top = step1.getBoundingClientRect().top + window.pageYOffset - 100;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+    }, 50);
+}
 
 
 // ========== CALENDAR ==========
@@ -311,9 +504,9 @@ function renderCalendar() {
 
     // Header
     var html = '<div class="cal-header">';
-    html += '<button class="cal-nav" onclick="calPrev()" aria-label="Previous month">&lsaquo;</button>';
+    html += '<button class="cal-nav" onclick="calPrev()" aria-label="Previous month">\u2039</button>';
     html += '<span class="cal-month-label">' + MONTH_NAMES[month] + ' ' + year + '</span>';
-    html += '<button class="cal-nav" onclick="calNext()" aria-label="Next month">&rsaquo;</button>';
+    html += '<button class="cal-nav" onclick="calNext()" aria-label="Next month">\u203A</button>';
     html += '</div>';
 
     // Day headers
@@ -331,7 +524,8 @@ function renderCalendar() {
     for (var d = 1; d <= daysInMonth; d++) {
         var date = new Date(year, month, d);
         var isPast = date < today;
-        var isSelected = selectedDate && isSameDay(date, selectedDate);
+        var isSelected = false;
+        if (selectedDate) { isSelected = isSameDay(date, selectedDate); }
         var dayType = getDayTier(date);
         var price = getDayMinPrice(date);
         var holName = isHoliday(date);
@@ -406,6 +600,20 @@ function selectDate(year, month, day) {
     var step3 = document.getElementById('bookingStep3');
     if (step3) step3.style.display = 'block';
 
+    // Update city chip and persistent Hillsboro notice in step 3 header
+    var cityLabel = CITY_LABELS[selectedCity] || selectedCity;
+    var pinSvg = '<svg class="chip-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
+    var chip3 = document.getElementById('selectedCityChip3');
+    if (chip3) {
+        chip3.innerHTML = pinSvg + ' ' + cityLabel;
+        chip3.className = 'selected-city-chip' + (selectedCity === 'hillsboro' ? ' is-hillsboro' : '');
+    }
+    var notice3 = document.getElementById('hillsboroNoticePersistent3');
+    if (notice3) notice3.style.display = selectedCity === 'hillsboro' ? 'flex' : 'none';
+    // Hide notice2 (step 2) so the message only appears once — in the more focused step 3 spot
+    var notice2 = document.getElementById('hillsboroNoticePersistent2');
+    if (notice2) notice2.style.display = 'none';
+
     // Hide Acuity embed
     var acuity = document.getElementById('acuityEmbed');
     if (acuity) acuity.style.display = 'none';
@@ -474,7 +682,6 @@ function renderTimeSlots() {
     html += '<form class="custom-time-form" id="customTimeForm" onsubmit="return handleCustomTimeSubmit(event)">';
     html += '<input type="hidden" name="_subject" value="Custom Time Request \u2013 PDX Home Energy Score">';
     html += '<input type="hidden" name="request_type" value="Custom Time Slot Request">';
-    html += '<input type="hidden" name="requested_date" value="' + dateStr + '">';
     html += '<div class="custom-time-form-grid">';
     html += '<div class="custom-time-field">';
     html += '<label for="ctName">Name</label>';
@@ -489,6 +696,11 @@ function renderTimeSlots() {
     html += '<input type="tel" id="ctPhone" name="phone" placeholder="(503) 555-1234">';
     html += '</div>';
     html += '<div class="custom-time-field">';
+    html += '<label for="ctDate">Preferred Date</label>';
+    var minDate = getDateInputMin();
+    html += '<input type="date" id="ctDate" name="requested_date" required value="' + formatDateISO(selectedDate) + '" min="' + minDate + '">';
+    html += '</div>';
+    html += '<div class="custom-time-field">';
     html += '<label for="ctTime">Preferred Time</label>';
     html += '<input type="text" id="ctTime" name="preferred_time" required placeholder="e.g. 7:30 AM, early afternoon">';
     html += '</div>';
@@ -497,10 +709,6 @@ function renderTimeSlots() {
     html += '<label for="ctNotes">Notes <span style="font-weight:400;color:#999;">(optional)</span></label>';
     html += '<textarea id="ctNotes" name="notes" rows="2" placeholder="Any additional details or scheduling preferences"></textarea>';
     html += '</div>';
-    html += '<p class="custom-time-date-badge">';
-    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F4E79" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
-    html += ' Requesting for <strong>' + dateStr + '</strong>';
-    html += '</p>';
     html += '<button type="submit" class="btn btn-primary custom-time-submit" id="ctSubmitBtn">Send Request</button>';
     html += '</form>';
     html += '<div class="custom-time-success" id="customTimeSuccess" style="display:none;">';
@@ -581,6 +789,13 @@ function changeDate() {
     var wrapper = document.getElementById('acuityIframeWrapper');
     if (wrapper) wrapper.innerHTML = '';
 
+    // Re-show Hillsboro notice in step 2 (was hidden when step 3 appeared)
+    var notice2 = document.getElementById('hillsboroNoticePersistent2');
+    if (notice2) notice2.style.display = selectedCity === 'hillsboro' ? 'flex' : 'none';
+    // Hide notice3 since step 3 is hidden
+    var notice3 = document.getElementById('hillsboroNoticePersistent3');
+    if (notice3) notice3.style.display = 'none';
+
     renderCalendar();
 
     var step2 = document.getElementById('bookingStep2');
@@ -600,14 +815,14 @@ function loadAcuityEmbed() {
     var price  = getSlotPrice(selectedDate, selectedTime);
     var tier   = getSlotTier(selectedDate, selectedTime);
     var tierLabel = getTierLabel(tier);
-    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '&appointmentType=' + typeId + '&notHeader=1';
+    var iframeSrc = ACUITY_BASE + '?owner=' + ACUITY_OWNER + '\x26appointmentType=' + typeId + '\x26notHeader=1';
 
     // Build date string for Acuity (pre-select the date)
     var mm = selectedDate.getMonth() + 1;
     var dd = selectedDate.getDate();
     var yyyy = selectedDate.getFullYear();
     var dateParam = yyyy + '-' + (mm < 10 ? '0' : '') + mm + '-' + (dd < 10 ? '0' : '') + dd;
-    iframeSrc += '&date=' + dateParam;
+    iframeSrc += '\x26date=' + dateParam;
 
     // Description
     var dateLabel = MONTH_NAMES[selectedDate.getMonth()] + ' ' + selectedDate.getDate() + ', ' + selectedDate.getFullYear();
@@ -659,7 +874,7 @@ function changeTime() {
         banner.setAttribute('aria-live', 'polite');
         banner.innerHTML =
             '<div class="acuity-confirm-inner">' +
-              '<div class="acuity-confirm-icon">&#10003;</div>' +
+              '<div class="acuity-confirm-icon">\u2713</div>' +
               '<h2 class="acuity-confirm-title">You\'re All Set!</h2>' +
               '<p class="acuity-confirm-body">' +
                 'Your energy score appointment is confirmed. ' +
@@ -688,11 +903,13 @@ function changeTime() {
         if (!e.origin || e.origin.indexOf('acuityscheduling.com') === -1) return;
         var data = e.data;
         var confirmed = false;
-        if (typeof data === 'object' && data !== null) {
-            var action = (data.action || data.type || data.event || '').toLowerCase();
-            if (action === 'confirm' || action === 'appointment-confirmed' ||
-                action === 'booked' || action === 'complete' || action === 'success') {
-                confirmed = true;
+        if (typeof data === 'object') {
+            if (data !== null) {
+                var action = (data.action || data.type || data.event || '').toLowerCase();
+                if (action === 'confirm' || action === 'appointment-confirmed' ||
+                    action === 'booked' || action === 'complete' || action === 'success') {
+                    confirmed = true;
+                }
             }
         } else if (typeof data === 'string') {
             var s = data.toLowerCase();

@@ -24,8 +24,11 @@ body {
 }
 
 img { max-width: 100%; height: auto; display: block; }
-a { color: #1F4E79; text-decoration: none; transition: color 0.2s ease; }
-a:hover { color: #5BA94B; }
+a { color: #1F4E79; text-decoration: none !important; transition: color 0.2s ease; }
+a:hover { color: #5BA94B; text-decoration: none !important; }
+/* Override Astra's .entry-content a underline */
+.ast-single-post .entry-content a,
+.entry-content a { text-decoration: none !important; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 .container-wide { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
@@ -118,8 +121,8 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .price-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: #2D2D2D; }
 .price { font-size: 3rem; font-weight: 800; color: #1F4E79; margin-bottom: 24px; }
 .price-plus { font-size: 1.5rem; vertical-align: super; font-weight: 600; opacity: 0.7; }
-.price-features { list-style: none; text-align: left; margin-bottom: 28px; }
-.price-features li { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 0.95rem; color: #444; }
+.price-features { list-style: none; text-align: center; margin-bottom: 28px; }
+.price-features li { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 0; font-size: 0.95rem; color: #444; }
 .price-features li svg { flex-shrink: 0; }
 .pricing-notes { text-align: center; max-width: 600px; margin: 0 auto; }
 .pricing-notes p { font-size: 0.88rem; color: #888; margin-bottom: 6px; line-height: 1.6; }
@@ -172,6 +175,31 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .booking-step-header-centered { justify-content: center; }
 .booking-step-num { width: 32px; height: 32px; border-radius: 50%; background: #1F4E79; color: #FFFFFF; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .booking-step-header h3 { font-size: 1.15rem; margin: 0; color: #1F4E79; }
+/* Right-side group in step header: city chip + back button */
+.step-header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+/* City chip — shows selected city name */
+.selected-city-chip { display: inline-flex; align-items: center; gap: 4px; background: #edf2f7; border: 1px solid #c6d4e3; border-radius: 20px; padding: 3px 12px 3px 8px; font-size: 0.82rem; font-weight: 600; color: #1F4E79; white-space: nowrap; line-height: 1.4; }
+.selected-city-chip:empty { display: none; }
+.selected-city-chip .chip-pin { width: 13px; height: 13px; flex-shrink: 0; opacity: 0.7; }
+/* Hillsboro chip gets an amber tint */
+.selected-city-chip.is-hillsboro { background: #fff8eb; border-color: #f0d78e; color: #7a5b0c; }
+
+/* City Selector */
+.city-selector { max-width: 580px; margin: 0 auto; text-align: center; }
+.city-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.city-options-3 { grid-template-columns: repeat(3, 1fr); }
+.city-option { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 16px; border: 2px solid #e8ecf0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; font-family: inherit; font-size: 1rem; min-height: 64px; }
+.city-option:hover { border-color: #1F4E79; background: #f0f4f8; }
+.city-option.selected { border-color: #1F4E79; background: #edf2f7; box-shadow: 0 0 0 3px rgba(31,78,121,0.15); }
+.city-name { font-weight: 600; color: #2D2D2D; }
+.city-surcharge { position: absolute; top: 5px; right: 6px; font-size: 0.72rem; font-weight: 700; color: #c57b15; background: #fff8eb; padding: 1px 6px; border-radius: 4px; line-height: 1.4; }
+.hillsboro-notice { display: flex; align-items: center; gap: 8px; background: #fff8eb; border: 1px solid #f0d78e; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.88rem; color: #7a5b0c; }
+.hillsboro-notice svg { flex-shrink: 0; }
+/* Persistent notice shown in steps 2 & 3 — sits between header and body, full width */
+.hillsboro-notice-persistent { border-radius: 8px; margin-bottom: 16px; }
+.btn-continue { display: block; width: 100%; margin-top: 8px; }
+
+/* Legacy size styles (kept for compatibility) */
 .size-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .size-option { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 24px 20px; border: 2px solid #e8ecf0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
 .size-option:hover { border-color: #1F4E79; background: #f0f4f8; }
@@ -323,7 +351,7 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .cal-nav { background: none; border: 2px solid #e8ecf0; border-radius: 8px; width: 36px; height: 36px; font-size: 1.3rem; color: #1F4E79; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
 .cal-nav:hover { background: #1F4E79; color: #FFFFFF; border-color: #1F4E79; }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.cal-day-header { text-align: center; font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; padding: 6px 0; }
+.cal-day-header { text-align: center; font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 0; }
 .cal-cell { position: relative; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; font-size: 0.85rem; transition: all 0.2s ease; }
 .cal-empty { background: transparent; }
 .cal-past { background: #f5f5f5; color: #ccc; cursor: default; }
@@ -383,7 +411,8 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     font-weight: 600; cursor: pointer; padding: 8px 14px;
     border-radius: 8px; transition: background 0.2s, color 0.2s;
 }
-.custom-time-toggle:hover { background: #eaf2fb; }
+.custom-time-toggle:hover { background: #1F4E79; color: #FFFFFF; }
+.custom-time-toggle:hover .custom-time-toggle-icon { background: #FFFFFF; color: #1F4E79; }
 .custom-time-toggle-icon {
     display: inline-flex; align-items: center; justify-content: center;
     width: 20px; height: 20px; border-radius: 50%;
@@ -409,14 +438,19 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     color: #2D2D2D; margin-bottom: 4px;
 }
 .custom-time-field input,
-.custom-time-field textarea {
+.custom-time-field textarea,
+.custom-time-field select {
     width: 100%; padding: 9px 12px; border: 1px solid #cfd8e3;
     border-radius: 8px; font-size: 0.88rem; color: #333;
     background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box; font-family: inherit;
 }
+.custom-time-field input[type="date"] {
+    cursor: pointer;
+}
 .custom-time-field input:focus,
-.custom-time-field textarea:focus {
+.custom-time-field textarea:focus,
+.custom-time-field select:focus {
     outline: none; border-color: #1F4E79;
     box-shadow: 0 0 0 3px rgba(31,78,121,0.1);
 }
@@ -506,11 +540,19 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
     .payment-grid { grid-template-columns: 1fr; max-width: 400px; }
     .calendar-wrapper { grid-template-columns: 1fr; }
     .size-options { grid-template-columns: 1fr; }
+    .city-options { grid-template-columns: 1fr; }
+    .city-options-3 { grid-template-columns: 1fr; }
     .addons-grid { grid-template-columns: 1fr; }
     .pricing-summary-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
+    .price-features {
+        text-align: left;
+    }
+    .price-features li {
+        justify-content: flex-start;
+    }
     .hero { padding: 150px 0 70px; }
     .hero h1 { font-size: 2.2rem; }
     .hero-subtitle { font-size: 1.2rem; }

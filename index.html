@@ -180,8 +180,8 @@
                 <div class="price-card price-card-featured">
                     <h3>Up to 2,500 sq ft</h3>
                     <div class="price">Starting at $159</div>
-                    <ul class="price-features" style="text-align:center;">
-                        <li style="justify-content:center;">
+                    <ul class="price-features">
+                        <li>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5BA94B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             On-site energy assessment &amp; official report
                         </li>
@@ -204,15 +204,53 @@
     <section class="schedule-section" id="schedule">
         <div class="container container-wide">
             <h2>Schedule Your Appointment</h2>
-            <p class="section-subtitle">Select a date and time below to schedule your appointment. Weekday daytime appointments booked 48+ hours in advance offer the lowest rates.</p>
+            <p class="section-subtitle">Select your city, then pick a date and time. Weekday daytime appointments booked 48+ hours in advance offer the lowest rates.</p>
             <p class="booking-lead-in">Additional options beyond what's shown may be available. <a href="tel:5032906958">Call</a> or <a href="#contact">message</a> and we'll try to accommodate.</p>
 
             <div class="booking-flow" id="bookingFlow">
 
-                <!-- STEP 1: Pick a Date (Custom Calendar) -->
-                <div class="booking-step active" id="bookingStep2">
+                <!-- STEP 1: Select City -->
+                <div class="booking-step active" id="bookingStep1">
                     <div class="booking-step-header booking-step-header-centered">
+                        <h3>Select Your City</h3>
+                    </div>
+                    <div class="booking-step-body">
+                        <div class="city-selector">
+                            <div class="city-options city-options-3" id="cityOptions">
+                                <button class="city-option selected" data-city="portland">
+                                    <span class="city-name">Portland &amp; Milwaukie</span>
+                                </button>
+                                <button class="city-option" data-city="salem">
+                                    <span class="city-name">Salem</span>
+                                </button>
+                                <button class="city-option" data-city="hillsboro">
+                                    <span class="city-name">Hillsboro</span>
+                                    <span class="city-surcharge">+$50</span>
+                                </button>
+                            </div>
+                            <div class="hillsboro-notice" id="hillsboroNotice" style="display:none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c57b15" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                <span>Hillsboro properties include a <strong>$50 travel fee</strong> added to all prices shown below.</span>
+                            </div>
+                            <button class="btn btn-primary btn-lg btn-continue" id="continueToCalendar">
+                                Continue to Calendar →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Pick a Date (Custom Calendar) -->
+                <div class="booking-step" id="bookingStep2" style="display:none;">
+                    <div class="booking-step-header">
                         <h3>Pick a Date</h3>
+                        <div class="step-header-right">
+                            <span class="selected-city-chip" id="selectedCityChip2"></span>
+                            <button class="btn btn-outline btn-sm" id="changeCityBtn">← Change City</button>
+                        </div>
+                    </div>
+                    <div class="hillsboro-notice hillsboro-notice-persistent" id="hillsboroNoticePersistent2" style="display:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c57b15" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span>Hillsboro properties include a <strong>$50 travel fee</strong> added to all prices shown below.</span>
                     </div>
                     <div class="booking-step-body">
                         <div class="pricing-calendar" id="pricingCalendar">
@@ -221,11 +259,18 @@
                     </div>
                 </div>
 
-                <!-- STEP 2: Pick a Time (Slots with live pricing) -->
+                <!-- STEP 3: Pick a Time (Slots with live pricing) -->
                 <div class="booking-step" id="bookingStep3" style="display:none;">
                     <div class="booking-step-header">
                         <h3>Pick a Time</h3>
-                        <button class="btn btn-outline btn-sm" onclick="changeDate()">&#8592; Change Date</button>
+                        <div class="step-header-right">
+                            <span class="selected-city-chip" id="selectedCityChip3"></span>
+                            <button class="btn btn-outline btn-sm" id="changeDateBtn">&#8592; Change Date</button>
+                        </div>
+                    </div>
+                    <div class="hillsboro-notice hillsboro-notice-persistent" id="hillsboroNoticePersistent3" style="display:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c57b15" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span>Hillsboro properties include a <strong>$50 travel fee</strong> added to all prices shown below.</span>
                     </div>
                     <div class="booking-step-body">
                         <div id="timeSlots">
@@ -245,7 +290,7 @@
                             <p class="acuity-embed-desc" id="acuitySelectedType">Fill in your details and pay securely below.</p>
                         </div>
                     </div>
-                    <button class="btn btn-outline btn-sm" onclick="changeTime()">← Change Time</button>
+                    <button class="btn btn-outline btn-sm" id="changeTimeBtn">← Change Time</button>
                 </div>
                 <div class="acuity-iframe-wrapper" id="acuityIframeWrapper">
                     <!-- iframe injected dynamically -->
