@@ -188,10 +188,10 @@ h1, h2, h3, h4 { color: #1F4E79; line-height: 1.2; font-weight: 700; }
 .city-selector { max-width: 580px; margin: 0 auto; text-align: center; }
 .city-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .city-options-3 { grid-template-columns: repeat(3, 1fr); }
-.city-option { position: relative; display: flex; align-items: center; justify-content: center; padding: 18px 16px; border: 2px solid #e8ecf0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; font-family: inherit; font-size: 1rem; min-height: 64px; }
+.city-option { position: relative; display: flex; align-items: center; justify-content: center; padding: 22px 16px; border: 2px solid #e8ecf0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s ease; font-family: inherit; font-size: 1rem; min-height: 72px; }
 .city-option:hover { border-color: #1F4E79; background: #f0f4f8; }
 .city-option.selected { border-color: #1F4E79; background: #edf2f7; box-shadow: 0 0 0 3px rgba(31,78,121,0.15); }
-.city-name { font-weight: 600; color: #2D2D2D; }
+.city-name { font-weight: 600; color: #2D2D2D; line-height: 1.4; }
 .city-surcharge { position: absolute; top: 5px; right: 6px; font-size: 0.72rem; font-weight: 700; color: #c57b15; background: #fff8eb; padding: 1px 6px; border-radius: 4px; line-height: 1.4; }
 .hillsboro-notice { display: flex; align-items: center; gap: 8px; background: #fff8eb; border: 1px solid #f0d78e; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.88rem; color: #7a5b0c; }
 .hillsboro-notice svg { flex-shrink: 0; }
