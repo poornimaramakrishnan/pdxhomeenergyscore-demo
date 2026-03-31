@@ -694,10 +694,11 @@ function renderTimeSlots() {
     html += 'Don\u2019t see a time that works? Request a custom slot';
     html += '</button>';
     html += '<div class="custom-time-form-wrapper" id="customTimeFormWrapper" style="display:none;">';
-    html += '<form class="custom-time-form" id="customTimeForm" onsubmit="return handleCustomTimeSubmit(event)">';
+    html += '<form class="custom-time-form" id="customTimeForm" action="https://formsubmit.co/pdxhousing@icloud.com" method="POST">';
     html += '<input type="hidden" name="_captcha" value="false">';
     html += '<input type="hidden" name="_template" value="table">';
     html += '<input type="hidden" name="_subject" value="Custom Time Request \u2013 PDX Home Energy Score">';
+    html += '<input type="hidden" name="_next" value="https://poornimaramakrishnan.github.io/pdxhomeenergyscore-demo/?form=thankyou">';
     html += '<input type="hidden" name="request_type" value="Custom Time Slot Request">';
     html += '<div class="custom-time-form-grid">';
     html += '<div class="custom-time-field">';
@@ -751,40 +752,6 @@ function toggleCustomTimeForm() {
         wrapper.style.display = 'none';
         if (icon) icon.textContent = '+';
     }
-}
-
-function handleCustomTimeSubmit(e) {
-    e.preventDefault();
-    var form = document.getElementById('customTimeForm');
-    var btn = document.getElementById('ctSubmitBtn');
-    if (!form) return false;
-
-    btn.disabled = true;
-    btn.textContent = 'Sending\u2026';
-
-    var data = new FormData(form);
-
-    fetch('https://formsubmit.co/ajax/pdxhousing@icloud.com', {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-    }).then(function(response) {
-        if (response.ok) {
-            form.style.display = 'none';
-            var successEl = document.getElementById('customTimeSuccess');
-            if (successEl) successEl.style.display = 'flex';
-        } else {
-            btn.disabled = false;
-            btn.textContent = 'Send Request';
-            alert('Something went wrong. Please try again or contact us directly.');
-        }
-    }).catch(function() {
-        btn.disabled = false;
-        btn.textContent = 'Send Request';
-        alert('Network error. Please check your connection and try again.');
-    });
-
-    return false;
 }
 
 /* ---------------------------------------------------- */
@@ -940,29 +907,17 @@ function changeTime() {
 
 
 // ========== CONTACT FORM ==========
+// Contact form now uses native form POST to formsubmit.co (no JS handler needed).
+// formsubmit.co redirects back via _next hidden field.
 
-function handleContactSubmit(event) {
-    event.preventDefault();
-    var form = document.getElementById('contactForm');
-    var submitBtn = document.getElementById('contactSubmitBtn');
-    var successMsg = document.getElementById('contactSuccess');
-    if (!form) return false;
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending\u2026';
-
-    var formData = new FormData(form);
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-    }).then(function (response) {
-        form.style.display = 'none';
-        if (successMsg) successMsg.style.display = 'block';
-    }).catch(function () {
-        form.style.display = 'none';
-        if (successMsg) successMsg.style.display = 'block';
-    });
-
-    return false;
-}
+// Show thank-you state if redirected back after form submission
+(function() {
+    if (window.location.search.indexOf('form=thankyou') !== -1) {
+        var cf = document.getElementById('contactForm');
+        var cs = document.getElementById('contactSuccess');
+        if (cf) cf.style.display = 'none';
+        if (cs) cs.style.display = 'block';
+        var contactSection = document.getElementById('contact');
+        if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+})();
