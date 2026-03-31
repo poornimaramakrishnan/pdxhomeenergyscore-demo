@@ -941,7 +941,7 @@ function handleCustomTimeSubmit(e) {
 
     var data = new FormData(form);
 
-    fetch('https://formspree.io/f/xdkozpqr', {
+    fetch('https://formspree.io/f/xzdkglgl', {
         method: 'POST',
         body: data,
         headers: { 'Accept': 'application/json' }
