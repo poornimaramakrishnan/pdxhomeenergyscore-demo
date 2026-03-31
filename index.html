@@ -491,7 +491,10 @@
         <div class="container">
             <h2>Get In Touch</h2>
             <p class="section-subtitle">Have a question? Send us a message and we'll get back to you quickly.</p>
-            <form class="contact-form" id="contactForm" action="https://formspree.io/f/xdkozpqr" method="POST" onsubmit="return handleContactSubmit(event)">
+            <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/pdxhousing@icloud.com" method="POST" onsubmit="return handleContactSubmit(event)">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_subject" value="New message from PDX Home Energy Score website">
                 <div class="form-group">
                     <label for="contactName">Name</label>
                     <input type="text" id="contactName" name="name" placeholder="Your name" required autocomplete="name" />
@@ -501,11 +504,13 @@
                     <input type="email" id="contactEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
                 </div>
                 <div class="form-group">
+                    <label for="contactSubject">Subject</label>
+                    <input type="text" id="contactSubject" name="subject" placeholder="Subject" required />
+                </div>
+                <div class="form-group">
                     <label for="contactMessage">Message</label>
                     <textarea id="contactMessage" name="message" rows="4" placeholder="How can we help?" required></textarea>
                 </div>
-                <input type="hidden" name="_replyto" value="">
-                <input type="hidden" name="_subject" value="New message from PDX Home Energy Score website">
                 <button type="submit" class="btn btn-primary btn-lg btn-contact-submit" id="contactSubmitBtn">Send Message</button>
                 <p class="contact-note">We typically respond within a few hours during business days.</p>
             </form>
