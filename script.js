@@ -695,6 +695,8 @@ function renderTimeSlots() {
     html += '</button>';
     html += '<div class="custom-time-form-wrapper" id="customTimeFormWrapper" style="display:none;">';
     html += '<form class="custom-time-form" id="customTimeForm" onsubmit="return handleCustomTimeSubmit(event)">';
+    html += '<input type="hidden" name="_captcha" value="false">';
+    html += '<input type="hidden" name="_template" value="table">';
     html += '<input type="hidden" name="_subject" value="Custom Time Request \u2013 PDX Home Energy Score">';
     html += '<input type="hidden" name="request_type" value="Custom Time Slot Request">';
     html += '<div class="custom-time-form-grid">';
@@ -762,7 +764,7 @@ function handleCustomTimeSubmit(e) {
 
     var data = new FormData(form);
 
-    fetch('https://formspree.io/f/xdkozpqr', {
+    fetch('https://formsubmit.co/ajax/pdxhousing@icloud.com', {
         method: 'POST',
         body: data,
         headers: { 'Accept': 'application/json' }
